@@ -15,7 +15,7 @@ class AddPhotoColumnAttendeeTable extends Migration
     {
         Schema::table('attendees', function (Blueprint $table) {
             $table->longText('photo')
-                ->default('/storage/default/attendee.jpg')
+                ->nullable()
                 ->after('email');
         });
     }
