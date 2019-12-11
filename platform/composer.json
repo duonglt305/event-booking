@@ -1,0 +1,46 @@
+{
+    "name": "dg/dissertation",
+    "description": "Platform based the laravel framework",
+    "type": "project",
+    "require": {
+        "simplesoftwareio/simple-qrcode": "^2.0.0",
+        "yajra/laravel-datatables-oracle": "^9.4",
+        "yajra/laravel-datatables-html": "^4.0",
+        "yajra/laravel-datatables-buttons": "^4.6",
+        "paypal/rest-api-sdk-php": "^1.14",
+        "tymon/jwt-auth": "1.*",
+        "botble/assets": "^1.0",
+        "ext-gd": "*",
+        "intervention/image": "2.*"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Duong Le",
+            "email": "duongrom.it.305@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "DG\\Dissertation\\Core\\": "./core/app",
+            "DG\\Dissertation\\Table\\": "./table/app",
+            "DG\\Dissertation\\Admin\\": "./admin/app",
+            "DG\\Dissertation\\Api\\": "./api/app"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "DG\\Dissertation\\Core\\Providers\\CoreServiceProvider",
+                "DG\\Dissertation\\Table\\Providers\\TableServiceProvider",
+                "DG\\Dissertation\\Admin\\Providers\\AdminServiceProvider",
+                "DG\\Dissertation\\Admin\\Providers\\RouteServiceProvider",
+                "DG\\Dissertation\\Admin\\Providers\\EventServiceProvider",
+                "DG\\Dissertation\\Api\\Providers\\ApiServiceProvider",
+                "DG\\Dissertation\\Api\\Providers\\RouteServiceProvider",
+                "DG\\Dissertation\\Api\\Providers\\EventServiceProvider"
+            ]
+        }
+    }
+}

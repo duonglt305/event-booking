@@ -1,0 +1,39 @@
+version: "3"
+
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - 80:80
+      - 81:81
+      - 443:443
+    volumes:
+      - ../:/var/www/html
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/php7.conf:/etc/nginx/php7.conf
+      - ./nginx/logs:/var/log/nginx
+    depends_on:
+      - php7
+      - mysql
+
+  php7:
+    build:
+      context: ./php
+    working_dir: /var/www/html/
+    volumes:
+      - ../:/var/www/html
+      - ./php/supervisor/conf.d:/etc/supervisor/conf.d
+      - ./php/supervisor/logs:/var/log/cache
+    ports:
+      - 9000:9000
+
+  mysql:
+    image: mysql:5.7
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+      - ./mysql/logs:/var/logs/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+    ports:
+      - 3306:3306

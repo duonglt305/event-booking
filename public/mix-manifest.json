@@ -1,0 +1,13 @@
+{
+    "/js/articles.create-update.js": "/js/articles.create-update.js",
+    "/js/attendees-verify.js": "/js/attendees-verify.js",
+    "/js/dashboard.js": "/js/dashboard.js",
+    "/js/detail.js": "/js/detail.js",
+    "/css/table.css": "/css/table.css",
+    "/js/event-create-update.js": "/js/event-create-update.js",
+    "/js/event.report.js": "/js/event.report.js",
+    "/js/room_capacity.js": "/js/room_capacity.js",
+    "/js/session-types.js": "/js/session-types.js",
+    "/js/session.create.js": "/js/session.create.js",
+    "/js/speakers.js": "/js/speakers.js"
+}

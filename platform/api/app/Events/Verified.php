@@ -1,0 +1,21 @@
+<?php
+
+
+namespace DG\Dissertation\Api\Events;
+
+use DG\Dissertation\Api\Models\Attendee;
+use Illuminate\Queue\SerializesModels;
+
+class Verified
+{
+    use SerializesModels;
+    /**
+     * @var Attendee
+     */
+    public $attendee;
+
+    public function __construct(Attendee $attendee)
+    {
+        $this->attendee = $attendee;
+    }
+}
