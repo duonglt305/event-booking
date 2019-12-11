@@ -16,7 +16,7 @@ deploy_dev:
     url: dissertation.duonglt.net
   script:
     - echo "Deploying"
-    - ssh deployer@"$SERVER" -p 2022 "cd /var/www/dissertation.duonglt.net && git checkout master && git pull origin master"
+    - ssh deployer@"$SERVER" -p 2022 "cd /var/www/dissertation && git checkout master && git pull origin master"
     - php artisan migrate && exit;
   only:
     - master
