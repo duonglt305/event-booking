@@ -9,8 +9,8 @@ before_script:
   - php composer-setup.php --install-dir=/usr/bin --filename=composer
   - php -r "unlink('composer-setup.php');"
   
-  # Install php-ext
-  - docker-php-ext-install gd
+  # Install php-ext-gd
+  - "docker-php-ext-configure gd --with-jpeg-dir=/usr/lib --with-freetype-dir=/usr/include/freetype2 && docker-php-ext-install gd"
   
   # Setup SSH deploy keys
   - 'which ssh-agent || ( apt-get install -qq openssh-client )'
