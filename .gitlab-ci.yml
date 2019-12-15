@@ -1,7 +1,7 @@
 image: php:7.3
 before_script:
-  - apt-get update -qq
-  - apt-get install -yqq 
+  - apt-get update -y
+  - apt-get install -yqq \ 
         --no-install-recommends \
         git \
         apt-utils \
