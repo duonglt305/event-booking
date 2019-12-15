@@ -5,7 +5,7 @@ before_script:
   
   # Install php-ext-gd
   - docker-php-ext-configure gd --with-jpeg-dir=/usr/lib --with-freetype-dir=/usr/include/freetype2
-  - docker-php-ext-install gd
+  - docker-php-ext-install mbstring mcrypt pdo_pgsql curl json intl gd xml zip bz2
   
   # Install composer
   - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
