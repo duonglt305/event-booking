@@ -1,12 +1,29 @@
 image: php:7.3
 before_script:
   - apt-get update -qq
-  - apt-get install -yqq git libmcrypt-dev libpq-dev libcurl4-gnutls-dev libicu-dev libvpx-dev libjpeg-dev libpng-dev libxpm-dev zlib1g-dev libfreetype6-dev libxml2-dev libexpat1-dev libbz2-dev libgmp3-dev libldap2-dev unixodbc-dev libsqlite3-dev libaspell-dev libsnmp-dev libpcre3-dev libtidy-dev
+  - apt-get install -yqq 
+        --no-install-recommends \
+        git \
+        apt-utils \
+        libmemcached-dev \
+        libzip-dev \
+        libz-dev \
+        libpq-dev \
+        libjpeg-dev \
+        libpng-dev \
+        libfreetype6-dev \
+        libssl-dev \
+        libmcrypt-dev 
   
   # Install php-ext-gd
-  - docker-php-ext-configure gd --with-jpeg-dir=/usr/lib --with-freetype-dir=/usr/include/freetype2 && docker-php-ext-install gd
-  # Install php-ext
-  - docker-php-ext-install mbstring curl json intl xml zip bz2
+  - docker-php-ext-configure gd \
+        --with-jpeg-dir=/usr/lib \
+        --with-freetype-dir=/usr/include/freetype2 && \
+        docker-php-ext-install gd
+  # Install php-ext-zip
+  - docker-php-ext-configure zip \
+        --with-libzip && \
+        docker-php-ext-install zip
   
   # Install composer
   - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
