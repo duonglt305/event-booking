@@ -16,6 +16,7 @@ deploy_dev:
     url: dissertation.duonglt.net
   script:
     - echo "Deploying"
-    - ssh deployer@"$SERVER" -p 2022 "cd /var/www/dissertation && git checkout master && git reset --hard origin/master && git pull origin master && php artisan migrate && exit"
+    - ssh deployer@"$SERVER" -p 2022 "cd /var/www/dissertation && git reset --hard origin/master && git pull origin master && php artisan migrate"
+    - "composer install --optimize-autoloader --no-dev && exit"
   only:
     - master
