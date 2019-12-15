@@ -1,7 +1,7 @@
 image: php:7.3
 before_script:
-  - apt update -qq
-  - apt install -qq git
+  - apt-get update -qq
+  - apt-get install -qq git
   
   # Install composer
   - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
@@ -10,7 +10,7 @@ before_script:
   - php -r "unlink('composer-setup.php');"
   
   # Install php-ext
-  - apt install php-gd
+  - apt-get install php-gd
   
   # Setup SSH deploy keys
   - 'which ssh-agent || ( apt-get install -qq openssh-client )'
