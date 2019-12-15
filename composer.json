@@ -12,6 +12,7 @@
         "ext-json": "*",
         "dg/dissertation": "*@dev",
         "fideloper/proxy": "^4.0",
+        "guzzlehttp/guzzle": "~6.0",
         "laravel/framework": "^6.0",
         "laravel/tinker": "^1.0",
         "webpatser/laravel-uuid": "^3.0"

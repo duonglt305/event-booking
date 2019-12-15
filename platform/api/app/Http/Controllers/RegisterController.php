@@ -5,7 +5,6 @@ namespace DG\Dissertation\Api\Http\Controllers;
 
 
 use App\Http\Controllers\Controller;
-use Carbon\Carbon;
 use DG\Dissertation\Api\Events\Registered;
 use DG\Dissertation\Api\Events\Verified;
 use DG\Dissertation\Api\Models\Attendee;
@@ -30,10 +29,13 @@ class RegisterController extends Controller
         $all = $request->only(['firstname', 'lastname', 'username', 'email', 'password']);
         $all['password'] = bcrypt($all['password']);
         try {
+            \DB::beginTransaction();
             $attendee = Attendee::create($all);
             event(new Registered($attendee));
+            \DB::commit();
             return response()->json(['message' => "Register successfully, we're send your verify code to your email {$attendee->email}, please check your email."], 200);
         } catch (\Exception $e) {
+            \DB::rollBack();
             return response()->json(['message' => 'Data cannot be processed.', 'errors' => []], 422);
         }
     }
@@ -68,7 +70,6 @@ class RegisterController extends Controller
             'token_type' => 'bearer',
             'expire_in' => $this->guard()->factory()->getTTL() * 60,
             'user' => $this->guard()->user(),
-            'expire_at' => Carbon::createFromTimestamp($payload['exp'])->toDateTimeString()
         ]);
     }
 

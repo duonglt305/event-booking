@@ -6,6 +6,7 @@ namespace DG\Dissertation\Api\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use DG\Dissertation\Api\Http\Resources\Organizer as OrganizerResource;
+use DG\Dissertation\Api\Http\Resources\Article as ArticleResource;
 
 /**
  * @property int id

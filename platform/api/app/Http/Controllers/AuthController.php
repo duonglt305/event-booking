@@ -14,7 +14,7 @@ class AuthController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('jwt.auth')->except(['login', 'refresh']);
+        $this->middleware('api.jwt.auth')->except(['login', 'refresh']);
         $this->middleware('jwt.refresh')->only(['refresh']);
     }
 
