@@ -11,7 +11,6 @@ use DG\Dissertation\Api\Models\Attendee;
 use DG\Dissertation\Api\Models\Event;
 use DG\Dissertation\Api\Models\Organizer;
 use DG\Dissertation\Api\Models\Registration;
-use DG\Dissertation\Api\Models\SessionRegistration;
 use DG\Dissertation\Api\Models\Ticket;
 use DG\Dissertation\Api\Repositories\EventRepository;
 use DG\Dissertation\Api\Repositories\OrganizerRepository;
@@ -53,7 +52,7 @@ class RegistrationController extends Controller
         RegistrationRepository $registrationRepository,
         OrganizerRepository $organizerRepository)
     {
-        $this->middleware(['jwt.auth']);
+        $this->middleware(['api.jwt.auth']);
         $this->ticketRepository = $ticketRepository;
         $this->eventRepository = $eventRepository;
         $this->registrationRepository = $registrationRepository;

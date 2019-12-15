@@ -83,6 +83,15 @@ class Event extends Model
         return $this->hasMany('DG\Dissertation\Api\Models\Article');
     }
 
+    public function getLatestArticlesAttribute()
+    {
+        return $this->articles()
+            ->orderByDesc('updated_at')
+            ->limit(3)
+            ->get();
+    }
+
+
     public function partners()
     {
         return $this->hasMany('DG\Dissertation\Api\Models\Partner');

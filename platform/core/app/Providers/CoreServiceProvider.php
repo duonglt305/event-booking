@@ -20,14 +20,8 @@ class CoreServiceProvider extends AppServiceProvider
         Helper::autoload(__DIR__ . '/../../helpers');
 
         $this->setNamespace('core')
-            ->loadAndPublicConfigs(['app', 'common','assets']);
-
+            ->loadAndPublicConfigs(['app', 'common', 'assets']);
         $this->applyConfig();
-    }
-
-    public function register()
-    {
-        $this->app->singleton('page-title',PageTitle::class);
     }
 
     public function applyConfig()
@@ -36,5 +30,10 @@ class CoreServiceProvider extends AppServiceProvider
             'app' => config('core.app'),
             'assets' => config('core.assets')
         ]);
+    }
+
+    public function register()
+    {
+        $this->app->singleton('page-title', PageTitle::class);
     }
 }

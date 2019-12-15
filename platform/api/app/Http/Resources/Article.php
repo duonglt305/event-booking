@@ -13,7 +13,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property string thumbnail
  * @property string description
  * @property string body
- * @property int status
  * @property mixed updated_at
  */
 class Article extends JsonResource
@@ -27,9 +26,8 @@ class Article extends JsonResource
             'thumbnail' => asset($this->thumbnail),
             'description' => $this->description,
             'body' => replace_img_url($this->body),
-            'status' => $this->status,
             'is_feature' => $this->is_feature,
-            'updated_at' => $this->updated_at,
+            'updated_at' => $this->updated_at
         ];
     }
 }

@@ -21,4 +21,5 @@ Route::prefix('v1')->group(function () {
     Route::post('confirm-payment', 'RegistrationController@confirmPayment');
     Route::post('payment', 'RegistrationController@payment');
     Route::get('registrations', 'RegistrationController@registrations');
+    Route::post('contact','EventController@contact');
 });
