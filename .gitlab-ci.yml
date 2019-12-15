@@ -10,7 +10,7 @@ before_script:
   - php -r "unlink('composer-setup.php');"
   
   # Install php-ext
-  - apt-get install php7.3-gd
+  - docker-php-ext-install gd
   
   # Setup SSH deploy keys
   - 'which ssh-agent || ( apt-get install -qq openssh-client )'
@@ -27,6 +27,7 @@ deploy_dev:
   script:
     - echo "Deploying"
     - ssh deployer@"$SERVER" -p 2022 "cd /var/www/dissertation && git reset --hard origin/master && git pull origin master && php artisan migrate"
+    - "rm -rf ./vendor"
     - "composer install --optimize-autoloader --no-dev && exit"
   only:
     - master
