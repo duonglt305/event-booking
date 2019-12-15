@@ -16,6 +16,7 @@ Route::prefix('v1')->group(function () {
         Route::get('{organizer}/events/{event}', 'EventController@show');
         Route::post('{organizer}/events/{event}/registration', 'RegistrationController@registration');
         Route::get('{organizer}/events/{event}/payment-detail', 'RegistrationController@paymentDetail');
+        Route::get('{organizer}/events/{event}/articles', 'EventController@articles');
     });
     Route::post('confirm-payment', 'RegistrationController@confirmPayment');
     Route::post('payment', 'RegistrationController@payment');

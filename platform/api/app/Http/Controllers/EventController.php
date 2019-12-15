@@ -6,6 +6,7 @@ namespace DG\Dissertation\Api\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use DG\Dissertation\Admin\Supports\ConstantDefine;
+use DG\Dissertation\Api\Http\Resources\Article as ArticleResource;
 use DG\Dissertation\Api\Http\Resources\Event as EventResource;
 use DG\Dissertation\Api\Http\Resources\EventDetail as EventDetailResource;
 use DG\Dissertation\Api\Models\Event;
@@ -80,5 +81,26 @@ class EventController extends Controller
             return response()->json(['message' => 'Event not found'], 404);
 
         return response()->json(new EventDetailResource($event));
+    }
+
+    public function articles($organizer, $event)
+    {
+        $organizer = $this->organizerRepository->firstBy(
+            ['WHERE' => [['slug', '=', $organizer]]]
+        );
+
+        if (!$organizer instanceof Organizer)
+            return response()->json(['message' => 'Organizer not found.'], 404);
+
+        $articles = $this->eventRepository->firstBy(
+            ['WHERE' => [
+                ['organizer_id', '=', $organizer->id],
+                ['slug', '=', $event]
+            ]],
+            ['articles']
+        )->articles()->where(
+            'status', '=', ConstantDefine::ARTICLE_STATUS_PUBLISH
+        )->paginate(9);
+        return ArticleResource::collection($articles);
     }
 }

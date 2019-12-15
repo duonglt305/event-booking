@@ -39,7 +39,7 @@ class EventDetail extends JsonResource
             'organizer' => new OrganizerResource($this->organizer),
             'channels' => ChannelResource::collection($this->channels),
             'tickets' => TicketResource::collection($this->tickets),
-            'articles' => ArticleResource::collection($this->articles),
+            'latest_articles' => ArticleResource::collection($this->articles),
             'partners' => PartnerResource::collection($this->partners),
             'speakers' => SpeakerResource::collection(($this->speakers))
         ];
