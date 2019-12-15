@@ -24,6 +24,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property mixed articles
  * @property mixed partners
  * @property mixed speakers
+ * @property mixed latest_articles
  */
 class EventDetail extends JsonResource
 {
@@ -39,7 +40,7 @@ class EventDetail extends JsonResource
             'organizer' => new OrganizerResource($this->organizer),
             'channels' => ChannelResource::collection($this->channels),
             'tickets' => TicketResource::collection($this->tickets),
-            'articles' => ArticleResource::collection($this->articles),
+            'latest_articles' => ArticleResource::collection($this->latest_articles),
             'partners' => PartnerResource::collection($this->partners),
             'speakers' => SpeakerResource::collection(($this->speakers))
         ];

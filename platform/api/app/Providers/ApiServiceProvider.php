@@ -3,12 +3,12 @@
 
 namespace DG\Dissertation\Api\Providers;
 
-use DG\Dissertation\Api\Exceptions\Handler;
+use DG\Dissertation\Api\Http\Middleware\Authenticate;
 use DG\Dissertation\Core\Supports\Helper;
 use DG\Dissertation\Core\Traits\LoadAndPublicTrait;
-use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
+use Tymon\JWTAuth\Http\Middleware\RefreshToken;
 
 class ApiServiceProvider extends ServiceProvider
 {
@@ -16,17 +16,21 @@ class ApiServiceProvider extends ServiceProvider
 
     public function register()
     {
+        $this->app->singleton(\Illuminate\Contracts\Debug\ExceptionHandler::class, \DG\Dissertation\Api\Exceptions\Handler::class);
     }
 
     public function boot()
     {
         Helper::autoload(platform_path('api/helpers'));
         $this->setNamespace('api')
-            ->loadAndPublicConfigs(['auth', 'jwt', 'paypal'])
+            ->loadAndPublicConfigs(['auth', 'jwt', 'paypal', 'cors'])
             ->loadView();
+        $this->applyMiddleware('api.jwt.auth', Authenticate::class);
+
         $this->mergeConfigs('api.jwt', 'jwt');
         $this->mergeConfigs('api.auth', 'auth');
-        $this->app->singleton(ExceptionHandler::class, Handler::class);
+        $this->mergeConfigs('api.cors', 'cors');
+
         Validator::extend('base64image', function ($attribute, $value, $parameters, $validator) {
             $explode = explode(',', $value);
             $allow = ['png', 'jpg', 'svg'];
