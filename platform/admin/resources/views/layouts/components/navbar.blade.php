@@ -57,7 +57,7 @@
                 <a class="nav-link dropdown-toggle" id="UserDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
                     {{ auth()->user()->name }}</a>
                 <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
-                    <a href="#" class="dropdown-item mt-3">
+                    <a href="{{ route('organizer.show_change_password') }}" class="dropdown-item mt-3">
                         Change Password
                     </a>
                     <a href="#" style="cursor: pointer" class="dropdown-item" onclick="document.getElementById('logout-form').submit();"> Logout </a>
