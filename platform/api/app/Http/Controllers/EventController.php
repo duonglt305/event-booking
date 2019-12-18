@@ -6,8 +6,10 @@ namespace DG\Dissertation\Api\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use DG\Dissertation\Admin\Supports\ConstantDefine;
+use DG\Dissertation\Api\Http\Resources\Article as ArticleResource;
 use DG\Dissertation\Api\Http\Resources\Event as EventResource;
 use DG\Dissertation\Api\Http\Resources\EventDetail as EventDetailResource;
+use DG\Dissertation\Api\Models\Article;
 use DG\Dissertation\Api\Models\Contact;
 use DG\Dissertation\Api\Models\Event;
 use DG\Dissertation\Api\Models\Organizer;
@@ -67,9 +69,7 @@ class EventController extends Controller
      */
     public function show($organizer, $event)
     {
-        $organizer = $this->organizerRepository->firstBy(
-            ['WHERE' => [['slug', '=', $organizer]]]
-        );
+        $organizer = $this->getOrganizerBySlug($organizer);
 
         if (!$organizer instanceof Organizer)
             return response()->json(['message' => 'Organizer not found.'], 404);
@@ -85,6 +85,56 @@ class EventController extends Controller
             return response()->json(['message' => 'Event not found'], 404);
 
         return response()->json(new EventDetailResource($event));
+    }
+
+    /**
+     * @param $organizer
+     * @return Organizer|null
+     */
+    protected function getOrganizerBySlug($organizer)
+    {
+        return $this->organizerRepository->firstBy(
+            ['WHERE' => [['slug', '=', $organizer]]]
+        );
+    }
+
+    public function articles($organizer, $event)
+    {
+        $organizer = $this->getOrganizerBySlug($organizer);
+
+        if (!$organizer instanceof Organizer)
+            return response()->json(['message' => 'Organizer not found.'], 404);
+
+        $articles = $this->eventRepository->firstBy(
+            ['WHERE' => [
+                ['organizer_id', '=', $organizer->id],
+                ['slug', '=', $event]
+            ]],
+            ['articles']
+        )->articles()->where(
+            'status', '=', ConstantDefine::ARTICLE_STATUS_PUBLISH
+        )->paginate(9);
+        return ArticleResource::collection($articles);
+    }
+
+    public function articleDetail($organizer, $event, $article)
+    {
+        if (!$organizer = $this->getOrganizerBySlug($organizer))
+            return response()->json(['message' => 'Organizer not found.'], 404);
+        $event = $this->eventRepository->firstBy(
+            ['WHERE' => [
+                ['organizer_id', '=', $organizer->id],
+                ['slug', '=', $event]
+            ]],
+            ['articles' => function ($query) use ($article) {
+                return $query->where('slug', '=', $article)
+                    ->where('status', '=', ConstantDefine::ARTICLE_STATUS_PUBLISH);
+            }]
+        );
+        $article = $event->articles->first();
+        if ($article instanceof Article)
+            return response()->json(new ArticleResource($article));
+        return response()->json(['message' => 'Article not found'], 404);
     }
 
     public function contact(Request $request, Recaptcha $recaptcha)
@@ -104,7 +154,6 @@ class EventController extends Controller
             return response()->json(['message' => 'Thank you for contact us.']);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Data cannot be processed.'], 422);
-
         }
     }
 }
