@@ -17,9 +17,10 @@ Route::prefix('v1')->group(function () {
         Route::post('{organizer}/events/{event}/registration', 'RegistrationController@registration');
         Route::get('{organizer}/events/{event}/payment-detail', 'RegistrationController@paymentDetail');
         Route::get('{organizer}/events/{event}/articles', 'EventController@articles');
+        Route::get('{organizer}/events/{event}/{article}', 'EventController@articleDetail');
     });
     Route::post('confirm-payment', 'RegistrationController@confirmPayment');
     Route::post('payment', 'RegistrationController@payment');
     Route::get('registrations', 'RegistrationController@registrations');
-    Route::post('contact','EventController@contact');
+    Route::post('contact', 'EventController@contact');
 });
