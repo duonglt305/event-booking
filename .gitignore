@@ -13,8 +13,6 @@ Homestead.yaml
 npm-debug.log
 yarn-error.log
 /services/*/logs
-/services2/mysql
-/services2/mysql/log
-/services2/nginx/logs
+/services2
 .DS_Store
 */.DS_Store
