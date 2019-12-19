@@ -1,7 +1,7 @@
 <?php
 
 
-namespace DG\Dissertation\Api\Services\Paypal;
+namespace DG\Dissertation\Api\Services\PayPal;
 
 
 use PayPal\Api\Payment;
