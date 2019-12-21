@@ -92,7 +92,7 @@ class TicketController extends Controller
             $ticket->update($validated);
             return redirect()->route('events.show', $event);
         } catch (\Exception $exception) {
-            abort(422);
+            abort(404);
         }
     }
 
