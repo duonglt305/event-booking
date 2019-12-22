@@ -1,5 +1,8 @@
 <?php
 
+Route::get('', function () {
+    return redirect()->route('dashboard');
+});
 Route::prefix('organizer')->group(function () {
     Route::get('sign-in', 'Auth\LoginController@showLoginForm')->name('login');
     Route::post('sign-in', 'Auth\LoginController@login');
