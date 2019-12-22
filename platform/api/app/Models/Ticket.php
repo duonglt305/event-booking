@@ -58,11 +58,11 @@ class Ticket extends Model
         if (is_null($this->special_validity)) return true;
         switch ($this->special_validity->type) {
             case 'amount':
-                return (($this->special_validity->amount - $this->registrations->count()) > 0);
+                return (($this->special_validity->amount - $this->registrations()->where('status', '=', 'PAID')->count()) > 0);
             case 'date':
                 return Carbon::now()->lessThanOrEqualTo($this->special_validity->date);
             case 'both':
-                return (($this->special_validity->amount - $this->registrations->count()) > 0)
+                return (($this->special_validity->amount - $this->registrations()->where('status', '=', 'PAID')->count()) > 0)
                     && Carbon::now()->lessThanOrEqualTo($this->special_validity->date);
             default:
                 return false;

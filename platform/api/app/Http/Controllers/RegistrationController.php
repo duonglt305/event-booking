@@ -246,6 +246,9 @@ class RegistrationController extends Controller
                 return response()->json(['message' => 'Registration not found.'], 404);
             if ($registration->paid())
                 return response()->json(['message' => 'Event already paid.'], 400);
+
+
+
             $total = collect([$registration->ticket])
                 ->merge($registration->sessions)
                 ->reduce(function ($total, $item) {
