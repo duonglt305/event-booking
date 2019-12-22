@@ -1506,7 +1506,7 @@ module.exports = function spread(callback) {
 
 
 var bind = __webpack_require__(/*! ./helpers/bind */ "./node_modules/axios/lib/helpers/bind.js");
-var isBuffer = __webpack_require__(/*! is-buffer */ "./node_modules/axios/node_modules/is-buffer/index.js");
+var isBuffer = __webpack_require__(/*! is-buffer */ "./node_modules/is-buffer/index.js");
 
 /*global toString:true*/
 
@@ -1841,10 +1841,10 @@ module.exports = {
 
 /***/ }),
 
-/***/ "./node_modules/axios/node_modules/is-buffer/index.js":
-/*!************************************************************!*\
-  !*** ./node_modules/axios/node_modules/is-buffer/index.js ***!
-  \************************************************************/
+/***/ "./node_modules/is-buffer/index.js":
+/*!*****************************************!*\
+  !*** ./node_modules/is-buffer/index.js ***!
+  \*****************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -2810,6 +2810,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
 
 
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -2830,107 +2834,127 @@ function () {
 
   _createClass(RoomCapacity, [{
     key: "getDataMapped",
-    value: function getDataMapped() {
-      var sessions, registrations, capacities, backgroundColors, titles;
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getDataMapped$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              _context.next = 2;
-              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(this.getData());
+    value: function () {
+      var _getDataMapped = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var sessions, registrations, capacities, backgroundColors, titles;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return this.getData();
 
-            case 2:
-              sessions = _context.sent;
-              registrations = [];
-              capacities = [];
-              backgroundColors = [];
-              titles = [];
-              sessions.forEach(function (session) {
-                registrations.push(session.attendees);
-                titles.push(session.title);
-                capacities.push(session.room_capacities);
+              case 2:
+                sessions = _context.sent;
+                registrations = [];
+                capacities = [];
+                backgroundColors = [];
+                titles = [];
+                sessions.forEach(function (session) {
+                  registrations.push(session.attendees);
+                  titles.push(session.title);
+                  capacities.push(session.room_capacities);
 
-                if (session.room_capacities < session.attendees) {
-                  backgroundColors.push('#fa555f');
-                } else {
-                  backgroundColors.push('#28c195');
-                }
-              });
-              return _context.abrupt("return", {
-                'titles': titles,
-                'registrations': registrations,
-                'capacities': capacities,
-                'backgroundColors': backgroundColors
-              });
+                  if (session.room_capacities < session.attendees) {
+                    backgroundColors.push('#fa555f');
+                  } else {
+                    backgroundColors.push('#28c195');
+                  }
+                });
+                return _context.abrupt("return", {
+                  'titles': titles,
+                  'registrations': registrations,
+                  'capacities': capacities,
+                  'backgroundColors': backgroundColors
+                });
 
-            case 9:
-            case "end":
-              return _context.stop();
+              case 9:
+              case "end":
+                return _context.stop();
+            }
           }
-        }
-      }, null, this);
-    }
+        }, _callee, this);
+      }));
+
+      function getDataMapped() {
+        return _getDataMapped.apply(this, arguments);
+      }
+
+      return getDataMapped;
+    }()
   }, {
     key: "init",
-    value: function init() {
-      var ctx, data;
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function init$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
-            case 0:
-              ctx = this.$roomCapacity[0].getContext('2d');
-              _context2.next = 3;
-              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(this.getDataMapped());
+    value: function () {
+      var _init = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        var ctx, data;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                ctx = this.$roomCapacity[0].getContext('2d');
+                _context2.next = 3;
+                return this.getDataMapped();
 
-            case 3:
-              data = _context2.sent;
-              new Chart(ctx, {
-                type: 'bar',
-                data: {
-                  labels: data.titles,
-                  datasets: [{
-                    label: 'Attendees',
-                    data: data.registrations,
-                    backgroundColor: data.backgroundColors
-                  }, {
-                    label: 'Capacity',
-                    data: data.capacities,
-                    backgroundColor: '#007bfd'
-                  }]
-                },
-                options: {
-                  scales: {
-                    yAxes: [{
-                      scaleLabel: {
-                        fontSize: 20,
-                        display: true,
-                        labelString: 'Capacity'
-                      },
-                      ticks: {
-                        min: 0
-                      }
-                    }],
-                    xAxes: [{
-                      scaleLabel: {
-                        fontSize: 20,
-                        display: true,
-                        labelString: 'Sessions'
-                      },
-                      ticks: {
-                        minRotation: 45
-                      }
+              case 3:
+                data = _context2.sent;
+                new Chart(ctx, {
+                  type: 'bar',
+                  data: {
+                    labels: data.titles,
+                    datasets: [{
+                      label: 'Attendees',
+                      data: data.registrations,
+                      backgroundColor: data.backgroundColors
+                    }, {
+                      label: 'Capacity',
+                      data: data.capacities,
+                      backgroundColor: '#007bfd'
                     }]
+                  },
+                  options: {
+                    scales: {
+                      yAxes: [{
+                        scaleLabel: {
+                          fontSize: 20,
+                          display: true,
+                          labelString: 'Capacity'
+                        },
+                        ticks: {
+                          min: 0
+                        }
+                      }],
+                      xAxes: [{
+                        scaleLabel: {
+                          fontSize: 20,
+                          display: true,
+                          labelString: 'Sessions'
+                        },
+                        ticks: {
+                          minRotation: 45
+                        }
+                      }]
+                    }
                   }
-                }
-              });
+                });
 
-            case 5:
-            case "end":
-              return _context2.stop();
+              case 5:
+              case "end":
+                return _context2.stop();
+            }
           }
-        }
-      }, null, this);
-    }
+        }, _callee2, this);
+      }));
+
+      function init() {
+        return _init.apply(this, arguments);
+      }
+
+      return init;
+    }()
   }, {
     key: "getData",
     value: function getData() {
@@ -2959,7 +2983,7 @@ $(function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/duongle/www/dissertation/platform/admin/resources/assets/js/room_capacity.js */"./platform/admin/resources/assets/js/room_capacity.js");
+module.exports = __webpack_require__(/*! /var/www/html/platform/admin/resources/assets/js/room_capacity.js */"./platform/admin/resources/assets/js/room_capacity.js");
 
 
 /***/ })

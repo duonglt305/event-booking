@@ -5,6 +5,7 @@ namespace DG\Dissertation\Api\Models;
 
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 /**
  * DG\Dissertation\Api\Models\Organizer
@@ -44,7 +45,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Organizer extends Model
 {
-
+    use Notifiable;
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

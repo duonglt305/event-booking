@@ -6,6 +6,8 @@
     "/css/table.css": "/css/table.css",
     "/js/event-create-update.js": "/js/event-create-update.js",
     "/js/event.report.js": "/js/event.report.js",
+    "/js/notification.js": "/js/notification.js",
+    "/js/notify.js": "/js/notify.js",
     "/js/room_capacity.js": "/js/room_capacity.js",
     "/js/session-types.js": "/js/session-types.js",
     "/js/session.create.js": "/js/session.create.js",
