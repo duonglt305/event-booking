@@ -20,6 +20,8 @@ mix.js('platform/admin/resources/assets/js/event-create-update.js', 'public/js')
 mix.js('platform/admin/resources/assets/js/event.report.js', 'public/js');
 mix.js('platform/admin/resources/assets/js/dashboard.js', 'public/js');
 mix.js('platform/admin/resources/assets/js/attendees-verify.js', 'public/js');
+mix.js('platform/admin/resources/assets/js/notify.js', 'public/js');
+mix.js('platform/admin/resources/assets/js/notification.js', 'public/js');
 
 
 

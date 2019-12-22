@@ -248,7 +248,7 @@ function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/duongle/www/dissertation/platform/admin/resources/assets/js/event-create-update.js */"./platform/admin/resources/assets/js/event-create-update.js");
+module.exports = __webpack_require__(/*! /var/www/html/platform/admin/resources/assets/js/event-create-update.js */"./platform/admin/resources/assets/js/event-create-update.js");
 
 
 /***/ })

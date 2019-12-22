@@ -15,6 +15,7 @@
         "guzzlehttp/guzzle": "~6.0",
         "laravel/framework": "^6.0",
         "laravel/tinker": "^1.0",
+        "pusher/pusher-php-server": "^4.1",
         "webpatser/laravel-uuid": "^3.0"
     },
     "require-dev": {

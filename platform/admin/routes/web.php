@@ -20,6 +20,10 @@ Route::prefix('organizer')->group(function () {
         Route::get('change-password','Auth\ChangePasswordController@showChangePassword')->name('organizer.show_change_password');
         Route::post('change-password','Auth\ChangePasswordController@changePassword')->name('organizer.change_password');
 
+        Route::get('notify','NotifyController@index')->name('organizer.notify');
+        Route::post('notify-datatable','NotifyController@datatable')->name('organizer.notify_datatable');
+        Route::post('mask-as-read-notifications','NotifyController@maskAsRead')->name('organizer.mask_as_read_notifications');
+
         Route::get('dashboard', 'DashboardController@index')->name('dashboard');
         Route::get('dashboard-data', 'DashboardController@getData')->name('dashboard.get_data');
         Route::resource('events', 'EventController');

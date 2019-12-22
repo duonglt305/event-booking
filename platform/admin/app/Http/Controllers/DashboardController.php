@@ -81,10 +81,13 @@ class DashboardController extends Controller
 
                 if ($ctime < $eventStartDate) {
                     $upcomingEvents++;
+                    $reTmp = $event->registrations->filter(function ($item) {
+                        return $item->status == 'PAID';
+                    });
                     $registrations[] = [
                         'event_id' => $event->id,
                         'event_name' => $event->name,
-                        'registrations' => $event->registrations->toArray()
+                        'registrations' => array_values($reTmp->toArray())
                     ];
                 };
 

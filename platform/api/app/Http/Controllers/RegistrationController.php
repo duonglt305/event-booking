@@ -6,6 +6,7 @@ namespace DG\Dissertation\Api\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use DB;
+use DG\Dissertation\Admin\Notifications\RegistrationNotification;
 use DG\Dissertation\Api\Http\Resources\Registration as RegistrationResource;
 use DG\Dissertation\Api\Models\Attendee;
 use DG\Dissertation\Api\Models\Event;
@@ -258,6 +259,7 @@ class RegistrationController extends Controller
                 ->execute();
             $registration->update(['status' => 'PAID']);
             DB::commit();
+            $this->sendNotification($registration);
             return response()->json([
                 'message' => 'Registration successfully, thank for purchase.',
                 'registration' => new RegistrationResource($registration)
@@ -268,6 +270,36 @@ class RegistrationController extends Controller
             } catch (Exception $e) {
             }
             return response()->json(['message' => 'Data cannot be processed.', 'er' => $e->getMessage()], 422);
+        }
+    }
+
+    private function sendNotification($registration)
+    {
+        try {
+            $options = array(
+                'cluster' => env('PUSHER_APP_CLUSTER'),
+                'encrypted' => true
+            );
+
+            $pusher = new \Pusher\Pusher(
+                env('PUSHER_APP_KEY'),
+                env('PUSHER_APP_SECRET'),
+                env('PUSHER_APP_ID'),
+                $options
+            );
+
+            $organizer = $registration->event->organizer;
+            $organizer = \DG\Dissertation\Admin\Models\Organizer::find($organizer->id);
+            $data['registration'] = $registration;
+            $data['attendee'] = $registration->attendee;
+            $data['event'] = $registration->event;
+            $data['sessions'] = $registration->sessions()->with('sessionType')->get();
+            $data['ticket'] = $registration->ticket;
+            $pusher->trigger('notify-channel', 'DG\Dissertation\Admin\Events\NotifyRegistration', $data);
+            $organizer->notify(new RegistrationNotification($data));
+
+        } catch (\Exception $exception) {
+            \Log::error($exception->getMessage());
         }
     }
 
