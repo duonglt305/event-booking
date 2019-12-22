@@ -16,3 +16,4 @@ yarn-error.log
 /services2
 .DS_Store
 */.DS_Store
+docker

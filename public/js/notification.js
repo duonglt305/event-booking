@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 9);
+/******/ 	return __webpack_require__(__webpack_require__.s = 11);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -2046,41 +2046,106 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
-/***/ "./node_modules/qr-scanner/qr-scanner.min.js":
-/*!***************************************************!*\
-  !*** ./node_modules/qr-scanner/qr-scanner.min.js ***!
-  \***************************************************/
+/***/ "./platform/admin/resources/assets/js/helpers.js":
+/*!*******************************************************!*\
+  !*** ./platform/admin/resources/assets/js/helpers.js ***!
+  \*******************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-class e{static hasCamera(){return navigator.mediaDevices.enumerateDevices().then((a)=>a.some((a)=>"videoinput"===a.kind)).catch(()=>!1)}constructor(a,c,b=e.DEFAULT_CANVAS_SIZE){this.$video=a;this.$canvas=document.createElement("canvas");this._onDecode=c;this._paused=this._active=!1;this.$canvas.width=b;this.$canvas.height=b;this._sourceRect={x:0,y:0,width:b,height:b};this._onCanPlay=this._onCanPlay.bind(this);this._onPlay=this._onPlay.bind(this);this._onVisibilityChange=this._onVisibilityChange.bind(this);
-this.$video.addEventListener("canplay",this._onCanPlay);this.$video.addEventListener("play",this._onPlay);document.addEventListener("visibilitychange",this._onVisibilityChange);this._qrWorker=new Worker(e.WORKER_PATH)}destroy(){this.$video.removeEventListener("canplay",this._onCanPlay);this.$video.removeEventListener("play",this._onPlay);document.removeEventListener("visibilitychange",this._onVisibilityChange);this.stop();this._qrWorker.postMessage({type:"close"})}start(){if(this._active&&!this._paused)return Promise.resolve();
-"https:"!==window.location.protocol&&console.warn("The camera stream is only accessible if the page is transferred via https.");this._active=!0;this._paused=!1;if(document.hidden)return Promise.resolve();clearTimeout(this._offTimeout);this._offTimeout=null;if(this.$video.srcObject)return this.$video.play(),Promise.resolve();let a="environment";return this._getCameraStream("environment",!0).catch(()=>{a="user";return this._getCameraStream()}).then((c)=>{this.$video.srcObject=c;this._setVideoMirror(a)}).catch((a)=>
-{this._active=!1;throw a;})}stop(){this.pause();this._active=!1}pause(){this._paused=!0;this._active&&(this.$video.pause(),this._offTimeout||(this._offTimeout=setTimeout(()=>{let a=this.$video.srcObject&&this.$video.srcObject.getTracks()[0];a&&(a.stop(),this._offTimeout=this.$video.srcObject=null)},300)))}static scanImage(a,c=null,b=null,d=null,f=!1,g=!1){let h=!1,l=new Promise((l,g)=>{b||(b=new Worker(e.WORKER_PATH),h=!0,b.postMessage({type:"inversionMode",data:"both"}));let n,m,k;m=(a)=>{"qrResult"===
-a.data.type&&(b.removeEventListener("message",m),b.removeEventListener("error",k),clearTimeout(n),null!==a.data.data?l(a.data.data):g("QR code not found."))};k=(a)=>{b.removeEventListener("message",m);b.removeEventListener("error",k);clearTimeout(n);g("Scanner error: "+(a?a.message||a:"Unknown Error"))};b.addEventListener("message",m);b.addEventListener("error",k);n=setTimeout(()=>k("timeout"),3E3);e._loadImage(a).then((a)=>{a=e._getImageData(a,c,d,f);b.postMessage({type:"decode",data:a},[a.data.buffer])}).catch(k)});
-c&&g&&(l=l.catch(()=>e.scanImage(a,null,b,d,f)));return l=l.finally(()=>{h&&b.postMessage({type:"close"})})}setGrayscaleWeights(a,c,b,d=!0){this._qrWorker.postMessage({type:"grayscaleWeights",data:{red:a,green:c,blue:b,useIntegerApproximation:d}})}setInversionMode(a){this._qrWorker.postMessage({type:"inversionMode",data:a})}_onCanPlay(){this._updateSourceRect();this.$video.play()}_onPlay(){this._updateSourceRect();this._scanFrame()}_onVisibilityChange(){document.hidden?this.pause():this._active&&
-this.start()}_updateSourceRect(){let a=Math.round(2/3*Math.min(this.$video.videoWidth,this.$video.videoHeight));this._sourceRect.width=this._sourceRect.height=a;this._sourceRect.x=(this.$video.videoWidth-a)/2;this._sourceRect.y=(this.$video.videoHeight-a)/2}_scanFrame(){if(!this._active||this.$video.paused||this.$video.ended)return!1;requestAnimationFrame(()=>{e.scanImage(this.$video,this._sourceRect,this._qrWorker,this.$canvas,!0).then(this._onDecode,(a)=>{this._active&&"QR code not found."!==a&&
-console.error(a)}).then(()=>this._scanFrame())})}_getCameraStream(a,c=!1){let b=[{width:{min:1024}},{width:{min:768}},{}];a&&(c&&(a={exact:a}),b.forEach((b)=>b.facingMode=a));return this._getMatchingCameraStream(b)}_getMatchingCameraStream(a){return 0===a.length?Promise.reject("Camera not found."):navigator.mediaDevices.getUserMedia({video:a.shift()}).catch(()=>this._getMatchingCameraStream(a))}_setVideoMirror(a){this.$video.style.transform="scaleX("+("user"===a?-1:1)+")"}static _getImageData(a,c=
-null,b=null,d=!1){b=b||document.createElement("canvas");let f=c&&c.x?c.x:0,g=c&&c.y?c.y:0,h=c&&c.width?c.width:a.width||a.videoWidth;c=c&&c.height?c.height:a.height||a.videoHeight;d||b.width===h&&b.height===c||(b.width=h,b.height=c);d=b.getContext("2d",{alpha:!1});d.imageSmoothingEnabled=!1;d.drawImage(a,f,g,h,c,0,0,b.width,b.height);return d.getImageData(0,0,b.width,b.height)}static _loadImage(a){if(a instanceof HTMLCanvasElement||a instanceof HTMLVideoElement||window.ImageBitmap&&a instanceof window.ImageBitmap||
-window.OffscreenCanvas&&a instanceof window.OffscreenCanvas)return Promise.resolve(a);if(a instanceof Image)return e._awaitImageLoad(a).then(()=>a);if(a instanceof File||a instanceof URL||"string"===typeof a){let c=new Image;c.src=a instanceof File?URL.createObjectURL(a):a;return e._awaitImageLoad(c).then(()=>{a instanceof File&&URL.revokeObjectURL(c.src);return c})}return Promise.reject("Unsupported image type.")}static _awaitImageLoad(a){return new Promise((c,b)=>{if(a.complete&&0!==a.naturalWidth)c();
-else{let d,f;d=()=>{a.removeEventListener("load",d);a.removeEventListener("error",f);c()};f=()=>{a.removeEventListener("load",d);a.removeEventListener("error",f);b("Image load error")};a.addEventListener("load",d);a.addEventListener("error",f)}})}}e.DEFAULT_CANVAS_SIZE=400;e.WORKER_PATH="qr-scanner-worker.min.js";/* harmony default export */ __webpack_exports__["default"] = (e);
-//# sourceMappingURL=qr-scanner.min.js.map
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Helpers; });
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Helpers =
+/*#__PURE__*/
+function () {
+  function Helpers() {
+    _classCallCheck(this, Helpers);
+  }
+
+  _createClass(Helpers, null, [{
+    key: "showInputErrors",
+    value: function showInputErrors(errors) {
+      var prefix = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+      Object.keys(errors).map(function (key) {
+        var message = errors[key][0];
+        var select = prefix !== '' ? "#".concat(prefix, "_").concat(key) : "#".concat(key);
+        var formControl = $(select);
+        Helpers.hideInputErrors(formControl);
+        formControl.addClass('is-invalid').parent().append("<div class=\"invalid-feedback\">".concat(message, "</div>"));
+        formControl.unbind('focus');
+        formControl.focus(function () {
+          formControl.removeClass('is-invalid').parent().find('.invalid-feedback').remove();
+        });
+      });
+    }
+  }, {
+    key: "hideInputErrors",
+    value: function hideInputErrors(formControl) {
+      var reset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+      formControl.unbind('focus');
+      formControl.removeClass('is-invalid').parent().find('.invalid-feedback').remove();
+      if (reset) formControl.val(null);
+    }
+  }, {
+    key: "showToast",
+    value: function showToast(message) {
+      var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'success';
+      $.toast({
+        heading: 'Notification',
+        text: message,
+        showHideTransition: 'slide',
+        icon: type,
+        loaderBg: '#f2a654',
+        position: 'top-right'
+      });
+    }
+  }, {
+    key: "toSlug",
+    value: function toSlug(str) {
+      var slug = str.toLowerCase();
+      slug = slug.replace(/á|à|ả|ạ|ã|ă|ắ|ằ|ẳ|ẵ|ặ|â|ấ|ầ|ẩ|ẫ|ậ/gi, 'a');
+      slug = slug.replace(/é|è|ẻ|ẽ|ẹ|ê|ế|ề|ể|ễ|ệ/gi, 'e');
+      slug = slug.replace(/i|í|ì|ỉ|ĩ|ị/gi, 'i');
+      slug = slug.replace(/ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ/gi, 'o');
+      slug = slug.replace(/ú|ù|ủ|ũ|ụ|ư|ứ|ừ|ử|ữ|ự/gi, 'u');
+      slug = slug.replace(/ý|ỳ|ỷ|ỹ|ỵ/gi, 'y');
+      slug = slug.replace(/đ/gi, 'd');
+      slug = slug.replace(/\`|\~|\!|\@|\#|\||\$|\%|\^|\&|\*|\(|\)|\+|\=|\,|\.|\/|\?|\>|\<|\'|\"|\:|\;|_/gi, '');
+      slug = slug.replace(/ /gi, "-");
+      slug = slug.replace(/\-\-\-\-\-/gi, '-');
+      slug = slug.replace(/\-\-\-\-/gi, '-');
+      slug = slug.replace(/\-\-\-/gi, '-');
+      slug = slug.replace(/\-\-/gi, '-');
+      slug = '@' + slug + '@';
+      slug = slug.replace(/\@\-|\-\@|\@/gi, '');
+      return slug;
+    }
+  }]);
+
+  return Helpers;
+}();
+
 
 
 /***/ }),
 
-/***/ "./platform/admin/resources/assets/js/attendees-verify.js":
-/*!****************************************************************!*\
-  !*** ./platform/admin/resources/assets/js/attendees-verify.js ***!
-  \****************************************************************/
+/***/ "./platform/admin/resources/assets/js/notification.js":
+/*!************************************************************!*\
+  !*** ./platform/admin/resources/assets/js/notification.js ***!
+  \************************************************************/
 /*! no exports provided */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var qr_scanner__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! qr-scanner */ "./node_modules/qr-scanner/qr-scanner.min.js");
+/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./helpers */ "./platform/admin/resources/assets/js/helpers.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -2091,279 +2156,105 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 
 
-qr_scanner__WEBPACK_IMPORTED_MODULE_0__["default"].WORKER_PATH = '/js/qr-scanner-worker.min.js';
 
-var AttendeesVerify =
+var Notification =
 /*#__PURE__*/
 function () {
-  function AttendeesVerify() {
-    _classCallCheck(this, AttendeesVerify);
+  function Notification() {
+    _classCallCheck(this, Notification);
 
-    this.$scanner = $('#scanner');
-    this.$roomFilter = $('#room-filter');
-    this.$channelFilter = $('#channel-filter');
-    this.$sessionSelect = $('#session-select');
-    this.$codeShow = $('#code-show');
-    this.$btnCheck = $('#btn-check');
-    this.$modelVerify = $('#model-verify');
-    this.$ticketInfoTable = $('#ticket-info-table');
-    this.$sessionInfoTable = $('#session-info-table');
-    this.$verifyUpdateBtn = $('#verify-update-btn');
-    this.$attendeeInfoTable = $('#attendee-info-table');
-    this.filterType = null;
-    this.typeId = null;
-    this.code = null;
-    this.dataVerify = null;
+    this.$notifyDatatable = $('#notify_datatable');
+    this.$maskAsRead = $('#mask-as-read');
     this.init();
   }
 
-  _createClass(AttendeesVerify, [{
+  _createClass(Notification, [{
     key: "init",
     value: function init() {
-      var _this = this;
-
-      this.initScanner();
-      this.initSelect2();
-      this.$btnCheck.click(function (event) {
-        event.preventDefault();
-
-        if (_this.code == null) {
-          swal('Please scan your QR Code');
-          return false;
-        } else if (_this.$sessionSelect.val() == null) {
-          swal('Pleas select session');
-          return false;
-        } else {
-          var data = {
-            code: _this.code,
-            session: _this.$sessionSelect.select2('data')[0].id
-          };
-          axios__WEBPACK_IMPORTED_MODULE_1___default.a.post($(event.currentTarget).data('url'), data).then(function (_ref) {
-            var data = _ref.data;
-
-            if (data.message) {
-              var wrapper = document.createElement('div');
-              wrapper.innerHTML = data.message;
-              swal({
-                html: true,
-                icon: data.type === 'already_verified' ? 'info' : 'error',
-                content: wrapper
-              });
-            } else if (data.ticket && data.session) {
-              var ticket = data.ticket,
-                  session = data.session,
-                  attendee = data.attendee;
-              _this.dataVerify = data;
-              var total = 0;
-
-              if (ticket.special_validity === null) {
-                total = 'Unlimited';
-              } else {
-                var type = ticket.special_validity.type;
-                total = type === 'date' ? 'Unlimited' : parseInt(ticket.special_validity.amount);
-              }
-
-              var ticketHtml = "<tr>\n                                                    <th>Name</th>\n                                                    <td>".concat(ticket.name, "</td>\n                                                </tr>\n                                                <tr>\n                                                    <th>Cost</th>\n                                                    <td>").concat(ticket.cost && ticket.cost != 0 ? ticket.cost : 'free', "</td>\n                                                </tr>\n                                                <tr>\n                                                    <th>Amount</th>\n                                                    <td>").concat(total, "</td>\n                                              </tr>");
-              var sessionHtml = "<tr>\n                                                    <th>Name</th>\n                                                    <td>".concat(session.title, "</td>\n                                                </tr>\n                                                <tr>\n                                                    <th>Description</th>\n                                                    <td>").concat(session.description, "</td>\n                                                </tr>\n                                                <tr>\n                                                    <th>Start time - End time</th>\n                                                    <td>").concat(session.start_time, " - ").concat(session.end_time, "</td>\n                                                </tr>\n                                                <tr>\n                                                    <th>Type</th>\n                                                    <td>").concat(session.session_type.cost === 0 ? 'Talk' : 'Workshop', "</td>\n                                                </tr>\n                                                <tr>\n                                                    <th>Room</th>\n                                                    <td>").concat(session.room.name, "</td>\n                                                </tr>\n                                                <tr>\n                                                    <th>Speaker</th>\n                                                    <td>").concat(session.speaker.firstname, " ").concat(session.speaker.lastname, "</td>\n                                                </tr>");
-              var attendeeHtml = "<tr>\n                                                    <th>Name</th>\n                                                    <td>".concat(attendee.firstname, " ").concat(attendee.lastname, "</td>\n                                                </tr>\n                                                <tr>\n                                                    <th>email</th>\n                                                    <td>").concat(attendee.email, "</td>\n                                                </tr>");
-
-              _this.$sessionInfoTable.find('tbody').html(sessionHtml);
-
-              _this.$ticketInfoTable.find('tbody').html(ticketHtml);
-
-              _this.$attendeeInfoTable.find('tbody').html(attendeeHtml);
-
-              _this.$modelVerify.modal('show');
-            }
-          }, function (err) {});
-        }
+      this.initTable();
+      this.initMaskAsRead();
+    }
+  }, {
+    key: "initTable",
+    value: function initTable() {
+      this.$notifyDatatable.DataTable({
+        dom: "<'row'" + "<'col-lg-6 col-12'l>" + "<'col-lg-6 col-12'f>" + ">" + "<'row'<'col-12'<'table-responsive't>>>" + "<'row'<'col-12 col-lg-6'i><'col-12 col-lg-6'p>>",
+        serverSide: true,
+        ajax: {
+          method: 'post',
+          url: this.$notifyDatatable.data('url'),
+          headers: {
+            'X-CSRF-TOKEN': $('meta[name=csrf-token]').attr('content')
+          }
+        },
+        pageLength: 100,
+        columns: [{
+          title: '#',
+          name: 'DT_RowIndex',
+          data: 'DT_RowIndex',
+          "class": 'text-center py-1',
+          orderable: false,
+          searchable: false
+        }, {
+          title: 'Status',
+          name: 'status',
+          data: 'status',
+          "class": 'text-center'
+        }, {
+          title: 'Content',
+          name: 'content',
+          data: 'content',
+          "class": 'text-center'
+        }, {
+          title: 'Time',
+          name: 'time',
+          data: 'time',
+          "class": 'text-center'
+        }, {
+          title: 'Read at',
+          name: 'read_at',
+          data: 'read_at',
+          "class": 'text-center'
+        }]
       });
-      this.$verifyUpdateBtn.click(function (event) {
+    }
+  }, {
+    key: "initMaskAsRead",
+    value: function initMaskAsRead() {
+      this.$maskAsRead.click(function (event) {
         event.preventDefault();
-
-        if (_this.dataVerify) {
-          var attendeeId = _this.dataVerify.attendee.id;
-          var sessionId = _this.dataVerify.session.id;
-          var registrationId = _this.dataVerify.ticket.registrations[0].id;
-          axios__WEBPACK_IMPORTED_MODULE_1___default.a.post(_this.$verifyUpdateBtn.data('url'), {
-            attendee_id: attendeeId,
-            session_id: sessionId,
-            registration_id: registrationId
-          }).then(function (_ref2) {
-            var data = _ref2.data;
-
-            _this.$modelVerify.modal('hide');
-
-            swal(data.message).then(function () {
+        var url = $(event.target).data('url');
+        axios__WEBPACK_IMPORTED_MODULE_1___default.a.post(url).then(function (res) {
+          if (res.data && res.data.message) {
+            _helpers__WEBPACK_IMPORTED_MODULE_0__["default"].showToast(res.data.message);
+            setTimeout(function () {
               window.location.reload();
-            });
-          }, function (error) {
-            var message = error.response.data.message;
-            swal({
-              type: 'error',
-              text: message
-            });
-          });
-        }
+            }, 1000);
+          }
+        }, function (err) {
+          _helpers__WEBPACK_IMPORTED_MODULE_0__["default"].showToast(err.response.data.message, 'error');
+        });
       });
-    }
-  }, {
-    key: "initScanner",
-    value: function initScanner() {
-      var _this2 = this;
-
-      // QrScanner.hasCamera().then(hasCamera => camHasCamera.textContent = hasCamera);
-      //
-      var scanner = new qr_scanner__WEBPACK_IMPORTED_MODULE_0__["default"](this.$scanner[0], function (result) {
-        _this2.$codeShow.text(result);
-
-        _this2.code = result;
-      });
-      scanner.start();
-    }
-  }, {
-    key: "initSelect2",
-    value: function initSelect2() {
-      var _this3 = this;
-
-      this.$roomFilter.select2({
-        placeholder: 'Filter by room',
-        ajax: {
-          url: this.$roomFilter.data('url'),
-          dataType: 'json',
-          delay: 250,
-          data: function data(params) {
-            return {
-              term: params.term,
-              page: params.page
-            };
-          },
-          processResults: function processResults(data, params) {
-            params.page = params.page || 1;
-            return {
-              results: $.map(data.data, function (item) {
-                return {
-                  text: "".concat(item.name, " | Channel: ").concat(item.channel.name),
-                  id: item.id,
-                  title: "".concat(item.name, " | Channel: ").concat(item.channel.name)
-                };
-              }),
-              pagination: {
-                more: params.page * 10 < data.total
-              }
-            };
-          },
-          cache: true
-        },
-        escapeMarkup: function escapeMarkup(markup) {
-          return markup;
-        }
-      });
-      this.$channelFilter.select2({
-        placeholder: 'Filter by channels',
-        ajax: {
-          url: this.$channelFilter.data('url'),
-          dataType: 'json',
-          delay: 250,
-          data: function data(params) {
-            return {
-              term: params.term,
-              page: params.page
-            };
-          },
-          processResults: function processResults(data, params) {
-            params.page = params.page || 1;
-            return {
-              results: $.map(data.data, function (item) {
-                return {
-                  text: "".concat(item.name),
-                  id: item.id,
-                  title: "".concat(item.name)
-                };
-              }),
-              pagination: {
-                more: params.page * 10 < data.total
-              }
-            };
-          },
-          cache: true
-        },
-        escapeMarkup: function escapeMarkup(markup) {
-          return markup;
-        }
-      });
-      this.$roomFilter.on('select2:select', function (event) {
-        _this3.filterType = 'rooms';
-        _this3.typeId = event.params.data.id;
-
-        _this3.$channelFilter.val(null).trigger('change');
-
-        _this3.$sessionSelect.val(null).trigger('change');
-
-        _this3.$sessionSelect.prop('disabled', false);
-      });
-      this.$channelFilter.on('select2:select', function (event) {
-        _this3.filterType = 'channels';
-        _this3.typeId = event.params.data.id;
-
-        _this3.$roomFilter.val(null).trigger('change');
-
-        _this3.$sessionSelect.val(null).trigger('change');
-
-        _this3.$sessionSelect.prop('disabled', false);
-      });
-      this.$sessionSelect.select2({
-        placeholder: 'Select session',
-        ajax: {
-          url: this.$sessionSelect.data('url'),
-          dataType: 'json',
-          delay: 250,
-          data: function data(params) {
-            return {
-              type: _this3.filterType,
-              key: params.term,
-              page: params.page,
-              type_id: _this3.typeId
-            };
-          },
-          processResults: function processResults(data) {
-            return {
-              results: $.map(data, function (item) {
-                return {
-                  text: "".concat(item.title),
-                  id: item.id,
-                  title: "".concat(item.title)
-                };
-              })
-            };
-          },
-          cache: true
-        },
-        escapeMarkup: function escapeMarkup(markup) {
-          return markup;
-        }
-      });
-      this.$sessionSelect.prop('disabled', true);
     }
   }]);
 
-  return AttendeesVerify;
+  return Notification;
 }();
 
 $(function () {
-  new AttendeesVerify();
+  new Notification();
 });
 
 /***/ }),
 
-/***/ 9:
-/*!**********************************************************************!*\
-  !*** multi ./platform/admin/resources/assets/js/attendees-verify.js ***!
-  \**********************************************************************/
+/***/ 11:
+/*!******************************************************************!*\
+  !*** multi ./platform/admin/resources/assets/js/notification.js ***!
+  \******************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /var/www/html/platform/admin/resources/assets/js/attendees-verify.js */"./platform/admin/resources/assets/js/attendees-verify.js");
+module.exports = __webpack_require__(/*! /var/www/html/platform/admin/resources/assets/js/notification.js */"./platform/admin/resources/assets/js/notification.js");
 
 
 /***/ })

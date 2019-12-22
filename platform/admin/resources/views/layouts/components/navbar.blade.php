@@ -12,45 +12,52 @@
         <ul class="navbar-nav navbar-nav-right">
             <li class="nav-item dropdown">
                 <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
-                    <i class="mdi mdi-file-outline"></i>
-                    <span class="count">7</span>
+                    <i class="mdi mdi-bell-outline"></i>
+                    <span class="count" id="nav-bar-notify-num"
+                          data-app-cluster="{{env("PUSHER_APP_CLUSTER")}}"
+                          data-app-key="{{env("MIX_PUSHER_APP_KEY")}}">{{ count(auth()->user()->unreadNotifications) }}</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list pb-0" aria-labelledby="messageDropdown">
                     <a class="dropdown-item py-3">
-                        <p class="mb-0 font-weight-medium float-left">You have 7 unread mails </p>
-                        <span class="badge badge-pill badge-primary float-right">View all</span>
+                        <p class="mb-0 font-weight-medium float-left" id="notify-sentence">You have {{ count(auth()->user()->unreadNotifications)  }} unread notification </p>
+                        <span class="badge badge-pill badge-primary float-right" style="cursor: pointer" data-url="{{ route('organizer.notify') }}" id="view-all-notify">View all</span>
                     </a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item preview-item">
-                        <div class="preview-thumbnail">
-                            <img src="{{ asset('admin/images/faces/face10.jpg') }}" alt="image" class="img-sm profile-pic"> </div>
-
-                        <div class="preview-item-content flex-grow py-2">
-                            <p class="preview-subject ellipsis font-weight-medium text-dark">Marian Garner </p>
-                            <p class="font-weight-light small-text"> The meeting is cancelled </p>
-                        </div>
-                    </a>
-                </div>
-            </li>
-            <li class="nav-item dropdown ml-4">
-                <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
-                    <i class="mdi mdi-bell-outline"></i>
-                    <span class="count bg-success">4</span>
-                </a>
-                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list pb-0" aria-labelledby="notificationDropdown">
-                    <a class="dropdown-item py-3 border-bottom">
-                        <p class="mb-0 font-weight-medium float-left">You have 4 new notifications </p>
-                        <span class="badge badge-pill badge-primary float-right">View all</span>
-                    </a>
-                    <a class="dropdown-item preview-item py-3">
-                        <div class="preview-thumbnail">
-                            <i class="mdi mdi-alert m-auto text-primary"></i>
-                        </div>
-                        <div class="preview-item-content">
-                            <h6 class="preview-subject font-weight-normal text-dark mb-1">Application Error</h6>
-                            <p class="font-weight-light small-text mb-0"> Just now </p>
-                        </div>
-                    </a>
+                    <div id="notification_container">
+                        @if(count(auth()->user()->unreadNotifications) < 5)
+                            @foreach(auth()->user()->unreadNotifications as $noti)
+                                <a class="dropdown-item preview-item">
+                                    <div class="preview-item-content flex-grow py-2">
+                                        <p class="font-weight-medium text-dark">
+                                            Attendee just register to event now
+                                        </p>
+                                        <p class="font-weight-light small-text">
+                                            <strong>{{ $noti->data['attendee']['firstname'] . ' ' . $noti->data['attendee']['lastname'] }}</strong> just register to event <strong>{{ $noti->data['event']['name'] }}</strong>
+                                        </p>
+                                        <p class="text-muted text-right" style="font-size: 12px!important;">
+                                            {{ date('d/m/Y H:i',strtotime($noti->created_at)) }}
+                                        </p>
+                                    </div>
+                                </a>
+                            @endforeach
+                        @else
+                            @for ($i = 0; $i < 5; $i++)
+                                <a class="dropdown-item preview-item">
+                                    <div class="preview-item-content flex-grow py-2">
+                                        <p class="font-weight-medium text-dark">
+                                            Attendee just register to event now
+                                        </p>
+                                        <p class="font-weight-light small-text">
+                                            <strong>{{ auth()->user()->unreadNotifications[$i]->data['attendee']['firstname'] . ' ' . auth()->user()->unreadNotifications[$i]->data['attendee']['lastname'] }}</strong> just register to event <strong>{{ auth()->user()->unreadNotifications[$i]->data['event']['name'] }}</strong>
+                                        </p>
+                                        <p class="text-muted text-right" style="font-size: 12px!important;">
+                                            {{ date('d/m/Y H:i',strtotime(auth()->user()->unreadNotifications[$i]->created_at)) }}
+                                        </p>
+                                    </div>
+                                </a>
+                            @endfor
+                        @endif
+                    </div>
                 </div>
             </li>
             <li class="nav-item dropdown d-none d-xl-inline-block">

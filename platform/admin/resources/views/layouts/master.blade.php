@@ -14,5 +14,9 @@
     </div>
 @stop
 
+@push('plugin-js')
+    <script src="{{ asset('admin/js/pusher.min.js') }}"></script>
+@endpush
 @push('js')
+    <script src="{{ asset('js/notify.js') }}"></script>
 @endpush

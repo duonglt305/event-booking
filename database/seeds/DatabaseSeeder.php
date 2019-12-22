@@ -11,7 +11,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        Artisan::call('migrate:rollback');
+//        Artisan::call('migrate:rollback');
         Artisan::call('migrate');
         factory(\DG\Dissertation\Admin\Models\Organizer::class, 10)
             ->create()
