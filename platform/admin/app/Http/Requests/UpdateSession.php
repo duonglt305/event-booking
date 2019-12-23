@@ -69,10 +69,10 @@ class UpdateSession extends FormRequest
                 }
                 if ($isExists) {
                     $rule['session_start_time'][] = function ($attribute, $value, $fail) {
-                        $fail('this time is already has session registered');
+                        $fail('This time is already has session registered');
                     };
                     $rule['session_end_time'][] = function ($attribute, $value, $fail) {
-                        $fail('this time is already has session registered');
+                        $fail('This time is already has session registered');
                     };
                 }
             }
@@ -117,6 +117,7 @@ class UpdateSession extends FormRequest
                     [$postStartTime->toDateTimeString(), $postEndTime->toDateTimeString()]
                 );
             })
+            ->whereNotIn('id', [$this->request->get('session')])
             ->first();
     }
 

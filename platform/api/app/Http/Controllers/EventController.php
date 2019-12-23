@@ -78,7 +78,8 @@ class EventController extends Controller
             ['WHERE' => [
                 ['organizer_id', '=', $organizer->id],
                 ['slug', '=', $event]
-            ]]
+            ]],
+            ['channels', 'organizer','tickets','partners','speakers']
         );
 
         if (!$event instanceof Event)

@@ -32,6 +32,7 @@ class Room extends Model
 {
     public function sessions()
     {
-        return $this->hasMany('DG\Dissertation\Api\Models\Session');
+        return $this->hasMany('DG\Dissertation\Api\Models\Session')
+            ->orderBy('start_time');
     }
 }
