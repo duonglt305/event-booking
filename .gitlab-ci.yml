@@ -30,7 +30,10 @@ deploy_dev:
   script:
     - echo "Deploying"
     - ssh deployer@"$SERVER" -p 2022 "cd /var/www/dissertation && git reset --hard origin/master && git pull origin master && php artisan migrate"
+    - "sudo supervisorctl reread && sudo supervisorctl update && sudo supervisorctl status"
     - "rm -rf ./vendor"
-    - "composer install --optimize-autoloader --no-dev && exit"
+    - "composer install --optimize-autoloader --no-dev"
+    - "php artisan config:clear && php artisan route:clear"
+    - "php artisan config:cache && php artisan route:cache && exit"
   only:
     - master
