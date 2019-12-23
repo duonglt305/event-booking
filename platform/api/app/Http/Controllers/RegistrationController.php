@@ -245,9 +245,10 @@ class RegistrationController extends Controller
                 ]);
             if (!$registration instanceof Registration)
                 return response()->json(['message' => 'Registration not found.'], 404);
+            if (!$registration->ticket->available)
+                return response()->json(['message' => 'Ticket is no longer available.'], 400);
             if ($registration->paid())
                 return response()->json(['message' => 'Event already paid.'], 400);
-
 
 
             $total = collect([$registration->ticket])
@@ -272,7 +273,7 @@ class RegistrationController extends Controller
                 DB::rollBack();
             } catch (Exception $e) {
             }
-            return response()->json(['message' => 'Data cannot be processed.', 'er' => $e->getMessage()], 422);
+            return response()->json(['message' => 'Data cannot be processed.',], 422);
         }
     }
 
@@ -345,9 +346,13 @@ class RegistrationController extends Controller
         } catch (ValidationException $e) {
             return response()->json(['message' => 'Registration not found.'], 404);
         }
+
+
         try {
             $registration = $this->registrationRepository
                 ->findById($request->get('registration_id'), ['ticket', 'sessions']);
+            if (!$registration->ticket->available)
+                return response()->json(['message' => 'Ticket is no longer available.'], 400);
             $createPayment = $this->createPaymentWithTicket($registration->ticket);
             $this->mappedSessions($registration->sessions, $createPayment);
             return response()->json([
@@ -355,7 +360,7 @@ class RegistrationController extends Controller
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'message' => $e->getMessage()
+                'message' => 'Cannot create payment this event.',
             ], 422);
         }
     }
