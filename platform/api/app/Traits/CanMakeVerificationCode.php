@@ -97,7 +97,7 @@ trait CanMakeVerificationCode
      */
     protected function verificationCodeExpired($updatedAt)
     {
-        return Carbon::parse($updatedAt)->addSeconds(30 * 60)->isPast();
+        return Carbon::parse($updatedAt)->addSeconds(config('auth.verification.attendees.expires') * 60)->isPast();
     }
 
 }

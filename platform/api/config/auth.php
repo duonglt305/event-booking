@@ -16,7 +16,7 @@ return [
     ],
     'verification' => [
         'attendees' => [
-            'expire' => 30,
+            'expires' => 30,
         ]
     ]
 ];
