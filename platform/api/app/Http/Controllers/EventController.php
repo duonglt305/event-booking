@@ -42,7 +42,7 @@ class EventController extends Controller
     {
         $this->eventRepository = $eventRepository;
         $this->organizerRepository = $organizerRepository;
-        $this->middleware('api.jwt.auth')->only(['contact']);
+        //$this->middleware('api.jwt.auth')->only(['contact']);
     }
 
     /**
