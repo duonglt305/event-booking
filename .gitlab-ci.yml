@@ -34,6 +34,6 @@ deploy_dev:
     - "rm -rf ./vendor"
     - "composer install --optimize-autoloader --no-dev"
     - "php artisan config:clear && php artisan route:clear"
-    - "php artisan config:cache && php artisan route:cache && exit"
+    - "php artisan config:cache && exit"
   only:
     - master
