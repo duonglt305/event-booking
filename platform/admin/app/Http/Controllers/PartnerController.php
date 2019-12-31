@@ -93,7 +93,7 @@ class PartnerController extends Controller
         try {
             $event = $this->eventRepository->findOrFail($event);
             $validated = $request->validated();
-            $image = $imageService->upload($validated['logo'], $validated['name'], $event->id, $this->logoWidth, $this->logoHeight);
+            $image = $imageService->upload($validated['logo'], $validated['name'], $event->id);
             $validated['logo'] = $image->getPathname();
             $validated['event_id'] = $event->id;
             if ($this->partnerRepository->insert($validated)) {
@@ -147,7 +147,7 @@ class PartnerController extends Controller
             $partner = $this->partnerRepository->findOrFail($partner);
             $validated = $request->validated();
             if (isset($validated['logo'])) {
-                $image = $imageService->upload($validated['logo'], $validated['name'], $event, $this->logoWidth, $this->logoHeight);
+                $image = $imageService->upload($validated['logo'], $validated['name'], $event);
                 $validated['logo'] = $image->getPathname();
                 $imageService->delete($partner->logo);
             } else $validated['logo'] = $partner->logo;
