@@ -22,6 +22,12 @@
                 <span class="menu-title">Manage Events</span>
             </a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('organizer.contact') }}">
+                <i class="menu-icon fa fa-user"></i>
+                <span class="menu-title">Contact</span>
+            </a>
+        </li>
         @if(collect([
         'events.show',
         'tickets.create',

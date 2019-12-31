@@ -54,7 +54,7 @@ class NotifyController extends Controller
      */
     public function maskAsRead()
     {
-//        try {
+        try {
             foreach (auth()->user()->unreadNotifications as $notification) {
                 $notification->markAsRead();
             }
@@ -62,11 +62,10 @@ class NotifyController extends Controller
             return response()->json([
                 'message' => 'Update notification successful'
             ]);
-//        } catch (\Exception $exception) {
-//            return response()->json([
-//                'message' => 'Oops, have an error, can update notification'
-//            ], 500);
-//        }
-
+        } catch (\Exception $exception) {
+            return response()->json([
+                'message' => 'Oops, have an error, can update notification'
+            ], 500);
+        }
     }
 }
