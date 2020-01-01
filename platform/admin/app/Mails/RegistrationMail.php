@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class Registration extends Mailable implements ShouldQueue
+class RegistrationMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -25,7 +25,9 @@ class Registration extends Mailable implements ShouldQueue
 
     public function build()
     {
-        return $this->view('admin::mails.registration',['name' => 'Giang'])
-            ->subject('New Registration - Event Booking Platform');
+        return $this->view('admin::mail.registration-attendee', [
+            'data' => $this->data['data'],
+            'total' => $this->data['total']
+        ])->subject('New Registration - Event Booking Platform');
     }
 }

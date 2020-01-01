@@ -566,10 +566,9 @@
         <td>&nbsp;</td>
         <td class="container">
             <div class="content">
-                <p>Hello Organizer,</p>
-                <p>Here is the email notification for a new registration of your event</p>
+                <p>Hello {{ $data['attendee']->firstname }} {{ $data['attendee']->lastname }},</p>
+                <p>Here is the email notification for your new registration</p>
                 <p style="font-size: 20px;margin-top: 20px">{{ $data['event']->name }}</p>
-                <p>Subscribers: {{ $data['attendee']->firstname }} {{ $data['attendee']->lastname }}</p>
                 <p>Time: {{ date('d/m/Y H:i',strtotime($data['registration']->created_at)) }}</p>
 
                 <p style="margin-top: 20px">Payment detail</p>

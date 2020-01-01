@@ -26,6 +26,7 @@ Route::prefix('organizer')->group(function () {
         Route::get('notify', 'NotifyController@index')->name('organizer.notify');
         Route::post('notify-datatable', 'NotifyController@datatable')->name('organizer.notify_datatable');
         Route::post('mask-as-read-notifications', 'NotifyController@maskAsRead')->name('organizer.mask_as_read_notifications');
+        Route::post('mask-as-read-one-notifications', 'NotifyController@maskAsReadOne')->name('organizer.mask_as_read_one_notifications');
 
         Route::get('contact', 'ContactController@index')->name('organizer.contact');
         Route::post('contact-datatable', 'ContactController@datatable')->name('organizer.contact_datatable');
