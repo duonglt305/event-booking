@@ -7,6 +7,7 @@ namespace DG\Dissertation\Api\Http\Controllers;
 use App\Http\Controllers\Controller;
 use DB;
 use DG\Dissertation\Admin\Notifications\RegistrationNotification;
+use DG\Dissertation\Admin\Supports\ConstantDefine;
 use DG\Dissertation\Api\Http\Resources\Registration as RegistrationResource;
 use DG\Dissertation\Api\Models\Attendee;
 use DG\Dissertation\Api\Models\Event;
@@ -113,7 +114,6 @@ class RegistrationController extends Controller
             }
             return response()->json([
                 'message' => 'Data cannot be processed.',
-                'er' => $e->getMessage(),
             ], 422);
         }
     }
@@ -139,7 +139,9 @@ class RegistrationController extends Controller
     {
         return $this->eventRepository->firstBy(
             ['WHERE' => [
-                ['slug', '=', $eSlug]
+                ['slug', '=', $eSlug],
+                ['status', '=', ConstantDefine::EVENT_STATUS_ACTIVE],
+                ['date', '>', now()->toDateTimeString()]
             ]],
             ['tickets', 'sessions']
         );

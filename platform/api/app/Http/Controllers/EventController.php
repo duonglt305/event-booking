@@ -52,7 +52,6 @@ class EventController extends Controller
     {
         $events = $this->eventRepository->
         getModel()
-            ->where('status', '=', 1)
             ->orderBy('date')
             ->where(function ($query) {
                 return $query->where('date', '>=', now()->toDateTimeString())
@@ -77,9 +76,10 @@ class EventController extends Controller
         $event = $this->eventRepository->firstBy(
             ['WHERE' => [
                 ['organizer_id', '=', $organizer->id],
-                ['slug', '=', $event]
+                ['slug', '=', $event],
+                ['status', '=', ConstantDefine::EVENT_STATUS_ACTIVE]
             ]],
-            ['channels', 'organizer','tickets','partners','speakers']
+            ['channels', 'organizer', 'tickets', 'partners', 'speakers']
         );
 
         if (!$event instanceof Event)
@@ -106,32 +106,48 @@ class EventController extends Controller
         if (!$organizer instanceof Organizer)
             return response()->json(['message' => 'Organizer not found.'], 404);
 
-        $articles = $this->eventRepository->firstBy(
-            ['WHERE' => [
-                ['organizer_id', '=', $organizer->id],
-                ['slug', '=', $event]
-            ]],
-            ['articles']
-        )->articles()->where(
+        $event = $this->getEventBySlug($organizer, $event, ['articles']);
+        if (!$event instanceof Event)
+            return response()->json(['message' => 'Event not found'], 404);
+
+        $articles = $event->articles()->where(
             'status', '=', ConstantDefine::ARTICLE_STATUS_PUBLISH
         )->paginate(9);
         return ArticleResource::collection($articles);
+    }
+
+    /**
+     * @param Organizer $organizer
+     * @param string $eSlug
+     * @param array $with
+     * @return Event|null
+     */
+    public function getEventBySlug(Organizer $organizer, string $eSlug, array $with = []): Event
+    {
+        return $this->eventRepository->firstBy(
+            ['WHERE' => [
+                ['organizer_id', '=', $organizer->id],
+                ['slug', '=', $eSlug],
+                ['status', '=', ConstantDefine::EVENT_STATUS_ACTIVE]
+            ]],
+            $with
+        );
     }
 
     public function articleDetail($organizer, $event, $article)
     {
         if (!$organizer = $this->getOrganizerBySlug($organizer))
             return response()->json(['message' => 'Organizer not found.'], 404);
-        $event = $this->eventRepository->firstBy(
-            ['WHERE' => [
-                ['organizer_id', '=', $organizer->id],
-                ['slug', '=', $event]
-            ]],
-            ['articles' => function ($query) use ($article) {
+        $event = $this->getEventBySlug($organizer, $event, [
+            'articles' => function ($query) use ($article) {
                 return $query->where('slug', '=', $article)
                     ->where('status', '=', ConstantDefine::ARTICLE_STATUS_PUBLISH);
-            }]
-        );
+            }
+        ]);
+
+        if (!$event instanceof Event)
+            return response()->json(['message' => 'Event not found'], 404);
+
         $article = $event->articles->first();
         if ($article instanceof Article)
             return response()->json(new ArticleResource($article));
@@ -150,6 +166,17 @@ class EventController extends Controller
         } catch (ValidationException $e) {
             return response()->json(['message' => $e->getMessage(), 'errors' => $e->errors()], 422);
         }
+
+        $event = $this->eventRepository->firstBy([
+            'WHERE' =>[
+                ['id', '=', $request->get('event_id')],
+                ['status', '=', ConstantDefine::EVENT_STATUS_ACTIVE]
+            ]
+        ]);
+
+        if(!$event instanceof Event)
+            return response()->json(['message' => 'Data cannot be processed.'], 422);
+
         try {
             Contact::create($request->only(['name', 'email', 'message', 'event_id']));
             return response()->json(['message' => 'Thank you for contact us.']);
