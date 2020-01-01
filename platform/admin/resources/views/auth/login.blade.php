@@ -8,10 +8,11 @@
         <div class="auto-form-wrapper d-flex align-items-center justify-content-center flex-column">
             <div class="nav-get-started">
                 <p>Have no account?</p>
-                <a class="btn get-started-btn" href="{{ route('register') }}">Sign up</a>
+                <a class="btn get-started-btn text-uppercase" href="{{ route('register') }}">Sign up</a>
             </div>
             <form action="{{ route('login') }}" method="post">
                 <h3 class="mr-auto text-uppercase">Login</h3>
+                <p class="mb-5 mr-auto">Hello! let's get started</p>
                 @csrf
                 <div class="form-group">
                     <label for="email" class="sr-only">Email</label>
