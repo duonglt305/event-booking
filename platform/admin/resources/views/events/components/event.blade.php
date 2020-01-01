@@ -1,4 +1,4 @@
-<div class="col-lg-3 col-md-6 col-12 mb-4">
+<div class="col-lg-4 col-md-6 col-12 mb-4">
     <div class="card">
         <img src="{{ asset($event->thumbnail) }}" class="card-img" alt="">
         <div class="card-body">
