@@ -1,6 +1,7 @@
 {
     "/js/articles.create-update.js": "/js/articles.create-update.js",
     "/js/attendees-verify.js": "/js/attendees-verify.js",
+    "/js/contact.js": "/js/contact.js",
     "/js/dashboard.js": "/js/dashboard.js",
     "/js/detail.js": "/js/detail.js",
     "/css/table.css": "/css/table.css",
