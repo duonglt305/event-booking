@@ -41,4 +41,9 @@ class Registration extends Model
     {
         return $this->hasMany('DG\Dissertation\Api\Models\SessionRegistration');
     }
+
+    public function attendee()
+    {
+        return $this->belongsTo('DG\Dissertation\Api\Models\Attendee');
+    }
 }

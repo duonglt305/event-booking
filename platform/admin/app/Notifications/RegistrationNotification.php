@@ -2,10 +2,12 @@
 
 namespace DG\Dissertation\Admin\Notifications;
 
+use DG\Dissertation\Admin\Mails\RegistrationMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Mail;
 
 class RegistrationNotification extends Notification implements ShouldQueue
 {
@@ -46,11 +48,19 @@ class RegistrationNotification extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         $total = intval($this->data['ticket']->cost);
-        if(!empty($this->data['sessions'])){
-            foreach ($this->data['sessions'] as $session){
-                if(intval($session->sessionType->cost) > 0) $total +=intval($session->sessionType->cost);
+        if (!empty($this->data['sessions'])) {
+            foreach ($this->data['sessions'] as $session) {
+                if (intval($session->sessionType->cost) > 0) $total += intval($session->sessionType->cost);
             }
         }
+        $attendeeMail = $this->data['attendee']->email;
+        if (!empty($attendeeMail)) {
+            Mail::to($attendeeMail)->send(new RegistrationMail([
+                'data' => $this->data,
+                'total' => $total
+            ]));
+        }
+
         return (new MailMessage)
             ->view('admin::mail.registration', [
                 'data' => $this->data,
@@ -69,7 +79,6 @@ class RegistrationNotification extends Notification implements ShouldQueue
      */
     public function toArray($notifiable)
     {
-
         return $this->data;
     }
 }

@@ -1,5 +1,7 @@
 import helpers from "./helpers";
 import moment from "moment-timezone";
+import Axios from "axios";
+import Helpers from "./helpers";
 
 class Notify {
     constructor() {
@@ -19,14 +21,15 @@ class Notify {
         let channel = pusher.subscribe('notify-channel');
 
         channel.bind('DG\\Dissertation\\Admin\\Events\\NotifyRegistration', data => {
-
-            let items = this.$notificationContainer.find('a').toArray();
-            let num = parseInt(this.$navBarNotifyNum.text());
-            if (items.length === 5) {
-                $(items[items.length - 1]).remove();
-                items.pop();
-            }
-            let html = `<a class="dropdown-item preview-item">
+            let organizer = parseInt(data.event.organizer_id);
+            if (organizer === parseInt(this.$notificationContainer.data('o-id'))) {
+                let items = this.$notificationContainer.find('a').toArray();
+                let num = parseInt(this.$navBarNotifyNum.text());
+                if (items.length === 5) {
+                    $(items[items.length - 1]).remove();
+                    items.pop();
+                }
+                let html = `<a class="dropdown-item preview-item">
                             <div class="preview-item-content flex-grow py-2">
                                 <p class="font-weight-medium text-dark">
                                     Attendee just register to event now
@@ -39,16 +42,38 @@ class Notify {
                                 </p>
                             </div>
                         </a>`;
-            this.$notificationContainer.html(html);
-            this.$notificationContainer.append(items);
-            this.$notifySentence.text(`You have ${num + 1} unread notification `);
-            this.$navBarNotifyNum.text(num + 1);
+                this.$notificationContainer.html(html);
+                this.$notificationContainer.append(items);
+                this.$notifySentence.text(`You have ${num + 1} unread notification `);
+                this.$navBarNotifyNum.text(num + 1);
+            }
+
         });
 
         this.$viewAllNotify.click(event => {
             window.location.href = $(event.target).data('url')
-        })
+        });
+
+        $(document).on('click', '.notification-item', event => {
+            let id = $(event.currentTarget).data('id');
+            let url = this.$notificationContainer.data('one-url');
+            Axios.post(url, {id}).then(
+                res => {
+                    if (res.data && res.data.message) {
+                        Helpers.showToast(res.data.message);
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000)
+                    }
+                },
+                err => {
+                    Helpers.showToast(err.response.data.message, 'error');
+                }
+        )
     }
+
+)
+}
 }
 
 $(() => {

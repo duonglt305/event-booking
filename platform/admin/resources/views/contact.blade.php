@@ -11,7 +11,7 @@
                     <div>
                         <div class="btn-group">
                             <button class="btn btn-info" data-url="{{ route('organizer.mask_as_read_all_contact') }}" id="mask-as-read-all">
-                                Mark as read
+                                Mark all as read
                             </button>
                         </div>
                     </div>

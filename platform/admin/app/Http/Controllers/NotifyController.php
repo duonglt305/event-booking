@@ -5,6 +5,7 @@ namespace DG\Dissertation\Admin\Http\Controllers;
 
 
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use DG\Dissertation\Admin\Models\Notification;
 
 class NotifyController extends Controller
@@ -31,16 +32,16 @@ class NotifyController extends Controller
                 ->rawColumns(['content', 'status'])
                 ->addColumn('content', function ($notify) {
                     $data = json_decode($notify->data);
-                    return '<div class="text-left" style="padding-left: 20px"><strong>'. $data->attendee->firstname . ' ' . $data->attendee->lastname . '</strong> just register to event <strong>' . $data->event->name . '<strong></div>';
+                    return '<div class="text-left" style="padding-left: 20px"><strong>' . $data->attendee->firstname . ' ' . $data->attendee->lastname . '</strong> just register to event <strong>' . $data->event->name . '<strong></div>';
                 })
                 ->addColumn('status', function ($notify) {
                     return '<div class="' . (empty($notify->read_at) ? 'text-danger' : 'text-success') . '">' . (empty($notify->read_at) ? 'unread' : 'read') . '</div>';
                 })
                 ->addColumn('time', function ($notify) {
-                    return date('d/m/Y H:i',strtotime($notify->created_at));
+                    return date('d/m/Y H:i', strtotime($notify->created_at));
                 })
                 ->addColumn('read_at', function ($notify) {
-                    return empty($notify->read_at) ? 'N/A' : date('d/m/Y H:i',strtotime($notify->read_at));
+                    return empty($notify->read_at) ? 'N/A' : date('d/m/Y H:i', strtotime($notify->read_at));
                 })
                 ->addIndexColumn()
                 ->toJson();
@@ -62,6 +63,31 @@ class NotifyController extends Controller
             return response()->json([
                 'message' => 'Update notification successful'
             ]);
+        } catch (\Exception $exception) {
+            return response()->json([
+                'message' => 'Oops, have an error, can update notification'
+            ], 500);
+        }
+    }
+
+    public function maskAsReadOne()
+    {
+        try {
+            if(request()->post('id')){
+                $id = request()->post('id');
+                $nofiy = Notification::find($id);
+                if($nofiy){
+                    $nofiy->read_at = Carbon::now()->toDateTimeString();
+                    $nofiy->save();
+                    return response()->json([
+                        'message' => 'Update notification successful'
+                    ]);
+                }
+            } else {
+                return response()->json([
+                    'message' => 'Oops, have an error, can update notification'
+                ], 500);
+            }
         } catch (\Exception $exception) {
             return response()->json([
                 'message' => 'Oops, have an error, can update notification'

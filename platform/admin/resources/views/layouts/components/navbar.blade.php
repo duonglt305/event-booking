@@ -23,10 +23,10 @@
                         <span class="badge badge-pill badge-primary float-right" style="cursor: pointer" data-url="{{ route('organizer.notify') }}" id="view-all-notify">View all</span>
                     </a>
                     <div class="dropdown-divider"></div>
-                    <div id="notification_container">
+                    <div id="notification_container" data-o-id="{{ auth()->user()->id }}" data-one-url="{{ route('organizer.mask_as_read_one_notifications') }}">
                         @if(count(auth()->user()->unreadNotifications) < 5)
                             @foreach(auth()->user()->unreadNotifications as $noti)
-                                <a class="dropdown-item preview-item">
+                                <a class="dropdown-item preview-item notification-item" data-id="{{ $noti->id }}" style="cursor: pointer">
                                     <div class="preview-item-content flex-grow py-2">
                                         <p class="font-weight-medium text-dark">
                                             Attendee just register to event now
