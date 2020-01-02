@@ -33,9 +33,9 @@ class ContactController extends Controller
     {
         try {
             $contacts = Contact::with(['event' => function ($query) {
-                return $query->where('events.organizer_id', auth()->guard()->user()->id)
-                    ->orderBy('created_at', 'desc');
-            }])->get();
+                return $query->where('events.organizer_id', auth()->guard()->user()->id);
+            }])->orderBy('created_at', 'desc')
+                ->get();
             return \DataTables::make($contacts)
                 ->rawColumns(['message', 'status', 'sender', 'action'])
                 ->addColumn('sender', function ($contact) {
