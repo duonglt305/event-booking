@@ -50,6 +50,7 @@ class AttendeesVerify {
                                 icon: data.type === 'already_verified' ? 'info' : 'error',
                                 content: wrapper
                             });
+                            this.$codeShow.text('');
                         } else if (data.ticket && data.session) {
                             let {ticket, session, attendee} = data;
                             this.dataVerify = data;

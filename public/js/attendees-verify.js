@@ -2149,6 +2149,8 @@ function () {
                 icon: data.type === 'already_verified' ? 'info' : 'error',
                 content: wrapper
               });
+
+              _this.$codeShow.text('');
             } else if (data.ticket && data.session) {
               var ticket = data.ticket,
                   session = data.session,
