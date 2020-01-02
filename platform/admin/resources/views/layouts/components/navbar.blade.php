@@ -64,6 +64,9 @@
                 <a class="nav-link dropdown-toggle" id="UserDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
                     {{ auth()->user()->name }}</a>
                 <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
+                    <a href="{{ route('organizer.profile') }}" class="dropdown-item mt-3">
+                        Profile
+                    </a>
                     <a href="{{ route('organizer.show_change_password') }}" class="dropdown-item mt-3">
                         Change Password
                     </a>

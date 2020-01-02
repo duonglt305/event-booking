@@ -19,7 +19,9 @@ Route::prefix('organizer')->group(function () {
         Route::get('', function () {
             return redirect()->route('dashboard');
         });
-
+        Route::get('profile',function (){
+            return view('admin::profile');
+        })->name('organizer.profile');
         Route::get('change-password', 'Auth\ChangePasswordController@showChangePassword')->name('organizer.show_change_password');
         Route::post('change-password', 'Auth\ChangePasswordController@changePassword')->name('organizer.change_password');
 

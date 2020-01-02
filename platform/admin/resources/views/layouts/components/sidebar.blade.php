@@ -46,7 +46,7 @@
         'events.attendees_verify_show'
         ])->contains(Route::currentRouteName()))
             <li class="nav-item event-title">
-                <div class="nav-link font-weight-bold text-uppercase">{{ $event->name }}</div>
+                <div class="nav-link font-weight-bold text-uppercase" style="white-space:normal">{{ $event->name }}</div>
             </li>
             <li class="nav-item @if(Route::currentRouteName() === 'event.show') active @endif">
                 <a class="nav-link" href="{{ route('events.show', $event->id) }}">
