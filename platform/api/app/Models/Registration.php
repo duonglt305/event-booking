@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\DG\Dissertation\Api\Models\SessionRegistration[] $sessionRegistrations
  * @property-read int|null $session_registrations_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\DG\Dissertation\Api\Models\Session[] $sessions
+ * @property \Illuminate\Database\Eloquent\Collection|\DG\Dissertation\Api\Models\Session[] $sessions
  * @property-read int|null $sessions_count
  * @property-read \DG\Dissertation\Api\Models\Ticket $ticket
  * @method static \Illuminate\Database\Eloquent\Builder|\DG\Dissertation\Api\Models\Registration newModelQuery()

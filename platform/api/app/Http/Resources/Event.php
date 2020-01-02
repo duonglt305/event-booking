@@ -16,7 +16,7 @@ use DG\Dissertation\Api\Http\Resources\Article as ArticleResource;
  * @property string thumbnail
  * @property string description
  * @property mixed date
- * @property \DG\Dissertation\Api\Models\Organizer organizer
+ * @property mixed organizer
  */
 class Event extends JsonResource
 {

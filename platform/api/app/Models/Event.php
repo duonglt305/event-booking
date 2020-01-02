@@ -19,6 +19,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $organizer_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\DG\Dissertation\Api\Models\Session[] $sessions
+ * @property-read int|null $sessions_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\DG\Dissertation\Api\Models\Article[] $articles
  * @property-read int|null $articles_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\DG\Dissertation\Api\Models\Channel[] $channels

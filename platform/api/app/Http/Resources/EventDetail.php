@@ -7,8 +7,8 @@ use DG\Dissertation\Api\Http\Resources\Article as ArticleResource;
 use DG\Dissertation\Api\Http\Resources\Channel as ChannelResource;
 use DG\Dissertation\Api\Http\Resources\Organizer as OrganizerResource;
 use DG\Dissertation\Api\Http\Resources\Partner as PartnerResource;
-use DG\Dissertation\Api\Http\Resources\Ticket as TicketResource;
 use DG\Dissertation\Api\Http\Resources\Speaker as SpeakerResource;
+use DG\Dissertation\Api\Http\Resources\Ticket as TicketResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -25,6 +25,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property mixed partners
  * @property mixed speakers
  * @property mixed latest_articles
+ * @property mixed registration
  */
 class EventDetail extends JsonResource
 {
@@ -42,7 +43,8 @@ class EventDetail extends JsonResource
             'tickets' => TicketResource::collection($this->tickets),
             'latest_articles' => ArticleResource::collection($this->latest_articles),
             'partners' => PartnerResource::collection($this->partners),
-            'speakers' => SpeakerResource::collection(($this->speakers))
+            'speakers' => SpeakerResource::collection(($this->speakers)),
+            'registration' => auth('api')->check() ? $this->registration : null,
         ];
     }
 }

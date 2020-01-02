@@ -79,12 +79,20 @@ class EventController extends Controller
                 ['slug', '=', $event],
                 ['status', '=', ConstantDefine::EVENT_STATUS_ACTIVE]
             ]],
-            ['channels', 'organizer', 'tickets', 'partners', 'speakers']
+            ['channels', 'organizer', 'tickets' => function ($query) {
+                $query->with(['registrations' => function ($query) {
+                    $query->with(['sessions'])
+                        ->where('attendee_id', auth('api')->id());
+                }]);
+            }, 'partners', 'speakers']
         );
 
         if (!$event instanceof Event)
             return response()->json(['message' => 'Event not found'], 404);
-
+        $registrationTicket = $event->tickets->filter(function ($ticket) {
+            return collect($ticket->registrations)->count() > 0;
+        })->first();
+        $event->registration = $registrationTicket ? $registrationTicket->registrations->first() : null;
         return response()->json(new EventDetailResource($event));
     }
 
@@ -168,13 +176,13 @@ class EventController extends Controller
         }
 
         $event = $this->eventRepository->firstBy([
-            'WHERE' =>[
+            'WHERE' => [
                 ['id', '=', $request->get('event_id')],
                 ['status', '=', ConstantDefine::EVENT_STATUS_ACTIVE]
             ]
         ]);
 
-        if(!$event instanceof Event)
+        if (!$event instanceof Event)
             return response()->json(['message' => 'Data cannot be processed.'], 422);
 
         try {
