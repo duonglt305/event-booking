@@ -318,9 +318,11 @@ class RegistrationController extends Controller
     {
         if (!$this->getOrganizer($oSlug)) return response()->json(['message' => 'Organizer not found'], 404);
         $event = $this->getEvent($eSlug);
-
         if (!$event) return response()->json(['message' => 'Event not found'], 404);
         $registration = $this->getRegistration($event);
+        $registration->sessions = $registration->sessions->merge($event->sessions->filter(function ($session) {
+            return intval($session->cost) === 0;
+        }));
         return new RegistrationResource($registration);
     }
 
@@ -329,6 +331,7 @@ class RegistrationController extends Controller
      */
     public function registrations()
     {
+        $attendee = auth('api')->user();
         $attendee = auth('api')->user();
         if ($attendee instanceof Attendee) {
             $registrations = $attendee->registrations()

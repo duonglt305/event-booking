@@ -43,6 +43,8 @@ class Session extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
+    protected $appends = ['cost'];
+
     public function sessionType()
     {
         return $this->belongsTo('DG\Dissertation\Api\Models\SessionType');
@@ -65,11 +67,6 @@ class Session extends Model
         return $this->belongsTo('DG\Dissertation\Api\Models\Speaker');
     }
 
-    public function sessionRatings()
-    {
-        return $this->hasMany(SessionRating::class);
-    }
-
     public function getRatingsAverage()
     {
         $ratings = $this->sessionRatings();
@@ -78,5 +75,10 @@ class Session extends Model
             $average += intval($rating->rate);
         }
         return round($average / $ratings->count(), 2);
+    }
+
+    public function sessionRatings()
+    {
+        return $this->hasMany(SessionRating::class);
     }
 }
