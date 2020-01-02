@@ -332,7 +332,6 @@ class RegistrationController extends Controller
     public function registrations()
     {
         $attendee = auth('api')->user();
-        $attendee = auth('api')->user();
         if ($attendee instanceof Attendee) {
             $registrations = $attendee->registrations()
                 ->orderBy('created_at')
