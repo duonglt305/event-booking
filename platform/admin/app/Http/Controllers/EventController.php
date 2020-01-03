@@ -16,6 +16,7 @@ use DG\Dissertation\Admin\Repositories\TicketRespository;
 use DG\Dissertation\Admin\Services\EventImageService;
 use DG\Dissertation\Admin\Supports\ConstantDefine;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 use function foo\func;
 
 class EventController extends Controller
@@ -545,6 +546,52 @@ class EventController extends Controller
                 ],
                     422
                 );
+        }
+    }
+
+    public function registrations($event)
+    {
+        try {
+            set_page_title('Attendee registration');
+            $event = $this->eventRepository->findOrFail($event);
+            return view('admin::events.registrations', compact('event'));
+        } catch (\Exception $exception) {
+            abort(404);
+        }
+
+    }
+
+    /**
+     * @param $event
+     * @param Request $request
+     */
+    public function datatableRegistrations($event, Request $request)
+    {
+        try {
+            $type = $request->get('status', 'paid');
+            $event = $this->eventRepository->findById(
+                $event,
+                [
+                    'registrations' => function ($query) use ($type) {
+                        return $query->where('status', strtoupper($type));
+                    },
+                    'registrations.attendee'
+                ]);
+
+            return \DataTables::make($event->registrations)
+                ->rawColumns(['full_name'])
+                ->addColumn('full_name', function ($registration) {
+                    $attendee = $registration->attendee;
+                    return '<div class="text-left" style="padding-left: 20px">' . $attendee->firstname . ' ' . $attendee->lastname . '</div>';
+                })
+                ->addColumn('registered_at', function ($registration) {
+                    return date('d/m/Y H:i', strtotime($registration->created_at));
+                })
+                ->addIndexColumn()
+                ->toJson();
+
+        } catch (\Exception $exception) {
+            return response()->json(['message' => 'Not found', 'errors' => []], 404);
         }
     }
 }
