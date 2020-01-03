@@ -23,6 +23,7 @@ mix.js('platform/admin/resources/assets/js/attendees-verify.js', 'public/js');
 mix.js('platform/admin/resources/assets/js/notify.js', 'public/js');
 mix.js('platform/admin/resources/assets/js/notification.js', 'public/js');
 mix.js('platform/admin/resources/assets/js/contact.js', 'public/js');
+mix.js('platform/admin/resources/assets/js/registration.js', 'public/js');
 
 
 

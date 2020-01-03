@@ -19,7 +19,7 @@ Route::prefix('organizer')->group(function () {
         Route::get('', function () {
             return redirect()->route('dashboard');
         });
-        Route::get('profile',function (){
+        Route::get('profile', function () {
             return view('admin::profile');
         })->name('organizer.profile');
         Route::get('change-password', 'Auth\ChangePasswordController@showChangePassword')->name('organizer.show_change_password');
@@ -47,6 +47,9 @@ Route::prefix('organizer')->group(function () {
                 Route::post('verify', 'EventController@attendeesVerifyUpdate')->name('event.attendees_verify.update');
                 Route::get('session-select', 'EventController@sessionSelect')->name('events.session_select');
             });
+
+            Route::get('datatable-registrations', 'EventController@datatableRegistrations')->name('event.datatable_registrations');
+            Route::get('registrations', 'EventController@registrations')->name('event.registration_show');
 
             Route::post('update-status-event', 'EventController@updateStatus')->name('events.update_status_event');
 

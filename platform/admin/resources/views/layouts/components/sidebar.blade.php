@@ -72,6 +72,12 @@
                     <span class="menu-title">Room capacity</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('event.registration_show', ['event'=> $event->id]) }}">
+                    <i class="menu-icon fa fa-building"></i>
+                    <span class="menu-title">Attendee Registration</span>
+                </a>
+            </li>
         @endisset
     </ul>
 </nav>
