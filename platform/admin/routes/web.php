@@ -48,8 +48,8 @@ Route::prefix('organizer')->group(function () {
                 Route::get('session-select', 'EventController@sessionSelect')->name('events.session_select');
             });
 
-            Route::get('datatable-registrations', 'EventController@datatableRegistrations')->name('event.datatable_registrations');
-            Route::get('registrations', 'EventController@registrations')->name('event.registration_show');
+            Route::get('datatable-registrations', 'EventController@datatableRegistrations')->name('events.datatable_registrations');
+            Route::get('registrations', 'EventController@registrations')->name('events.registration_show');
 
             Route::post('update-status-event', 'EventController@updateStatus')->name('events.update_status_event');
 

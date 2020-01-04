@@ -18,7 +18,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <table id="registration_table" data-url="{{ route('event.datatable_registrations',['event' => $event->id]) }}" class="table-hover table-bordered table-striped w-100"></table>
+                    <table id="registration_table" data-url="{{ route('events.datatable_registrations',['event' => $event->id]) }}" class="table-hover table-bordered table-striped w-100"></table>
                 </div>
             </div>
         </div>

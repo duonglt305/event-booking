@@ -67,7 +67,7 @@
                     <a href="{{ route('organizer.profile') }}" class="dropdown-item mt-3">
                         Profile
                     </a>
-                    <a href="{{ route('organizer.show_change_password') }}" class="dropdown-item mt-3">
+                    <a href="{{ route('organizer.show_change_password') }}" class="dropdown-item">
                         Change Password
                     </a>
                     <a href="#" style="cursor: pointer" class="dropdown-item" onclick="document.getElementById('logout-form').submit();"> Logout </a>

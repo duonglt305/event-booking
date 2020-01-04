@@ -43,7 +43,8 @@
         'events.edit',
         'events.room_capacity',
         'events.report',
-        'events.attendees_verify_show'
+        'events.attendees_verify_show',
+        'events.registration_show'
         ])->contains(Route::currentRouteName()))
             <li class="nav-item event-title">
                 <div class="nav-link font-weight-bold text-uppercase" style="white-space:normal">{{ $event->name }}</div>
@@ -73,7 +74,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('event.registration_show', ['event'=> $event->id]) }}">
+                <a class="nav-link" href="{{ route('events.registration_show', ['event'=> $event->id]) }}">
                     <i class="menu-icon fa fa-building"></i>
                     <span class="menu-title">Attendee Registration</span>
                 </a>
