@@ -102,11 +102,28 @@ class RegistrationController extends Controller
                 $sessions = $event->sessions()->whereIn('sessions.id', $request->get('session_ids'))->get();
                 $registrationSessions = $this->mappedSessions($sessions, $createPayment);
                 $registration->sessions()->sync($registrationSessions);
+                DB::commit();
+                return response()->json([
+                    'url' => $createPayment->create(),
+                ]);
             }
-            DB::commit();
-            return response()->json([
-                'url' => $createPayment->create(),
-            ]);
+            if ($ticket->cost <= 0) {
+                $registration->update(['status' => 'PAID']);
+                DB::commit();
+                $registration->sessions = $registration->sessions->merge($event->sessions->filter(function ($session) {
+                    return intval($session->cost) === 0;
+                }));
+                $this->sendNotification($registration);
+                return response()->json([
+                    'message' => 'Registration successfully, thank for purchase.',
+                    'registration' => new RegistrationResource($registration),
+                ]);
+            } else {
+                DB::commit();
+                return response()->json([
+                    'url' => $createPayment->create(),
+                ]);
+            }
         } catch (Exception $e) {
             try {
                 DB::rollBack();
@@ -167,6 +184,7 @@ class RegistrationController extends Controller
     protected function getRegistration(Event $event)
     {
         return $event->registrations()
+            ->with(['sessions'])
             ->where('attendee_id', '=', auth('api')->id())
             ->first();
     }
@@ -224,61 +242,6 @@ class RegistrationController extends Controller
         })->toArray();
     }
 
-    /**
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function confirmPayment(Request $request)
-    {
-        try {
-            $this->validate($request, [
-                'payment_id' => ['required', 'string'],
-                'payer_id' => ['required', 'string'],
-                'registration_id' => ['required', 'numeric', 'exists:registrations,id']
-            ]);
-        } catch (ValidationException $e) {
-            return response()->json(['message' => $e->getMessage(), 'errors' => $e->errors()], 422);
-        }
-        try {
-            DB::beginTransaction();
-            $registration = $this->registrationRepository
-                ->findById($request->get('registration_id'), [
-                    'ticket', 'sessions'
-                ]);
-            if (!$registration instanceof Registration)
-                return response()->json(['message' => 'Registration not found.'], 404);
-            if (!$registration->ticket->available)
-                return response()->json(['message' => 'Ticket is no longer available.'], 400);
-            if ($registration->paid())
-                return response()->json(['message' => 'Event already paid.'], 400);
-
-
-            $total = collect([$registration->ticket])
-                ->merge($registration->sessions)
-                ->reduce(function ($total, $item) {
-                    $total += $item->cost;
-                    return $total;
-                }, 0);
-
-            $executePayment = new ExecutePayment;
-            $executePayment->setTotal($total)
-                ->execute();
-            $registration->update(['status' => 'PAID']);
-            DB::commit();
-            $this->sendNotification($registration);
-            return response()->json([
-                'message' => 'Registration successfully, thank for purchase.',
-                'registration' => new RegistrationResource($registration)
-            ]);
-        } catch (Exception $e) {
-            try {
-                DB::rollBack();
-            } catch (Exception $e) {
-            }
-            return response()->json(['message' => 'Data cannot be processed.',], 422);
-        }
-    }
-
     private function sendNotification($registration)
     {
         try {
@@ -306,6 +269,65 @@ class RegistrationController extends Controller
 
         } catch (\Exception $exception) {
             \Log::error($exception->getMessage());
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function confirmPayment(Request $request)
+    {
+        try {
+            $this->validate($request, [
+                'payment_id' => ['required', 'string'],
+                'payer_id' => ['required', 'string'],
+                'registration_id' => ['required', 'numeric', 'exists:registrations,id']
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json(['message' => $e->getMessage(), 'errors' => $e->errors()], 422);
+        }
+        try {
+            DB::beginTransaction();
+            $registration = $this->registrationRepository
+                ->findById($request->get('registration_id'), [
+                    'ticket', 'sessions', 'ticket.event'
+                ]);
+            if (!$registration instanceof Registration)
+                return response()->json(['message' => 'Registration not found.'], 404);
+            if (!$registration->ticket->available)
+                return response()->json(['message' => 'Ticket is no longer available.'], 400);
+            if ($registration->paid())
+                return response()->json(['message' => 'Event already paid.'], 400);
+
+
+            $total = collect([$registration->ticket])
+                ->merge($registration->sessions)
+                ->reduce(function ($total, $item) {
+                    $total += $item->cost;
+                    return $total;
+                }, 0);
+
+            $executePayment = new ExecutePayment;
+            $executePayment->setTotal($total)
+                ->execute();
+            $registration->update(['status' => 'PAID']);
+            DB::commit();
+            $event = $registration->event;
+            $registration->sessions = $registration->sessions->merge($event->sessions->filter(function ($session) {
+                return intval($session->cost) === 0;
+            }));
+            $this->sendNotification($registration);
+            return response()->json([
+                'message' => 'Registration successfully, thank for purchase.',
+                'registration' => new RegistrationResource($registration)
+            ]);
+        } catch (Exception $e) {
+            try {
+                DB::rollBack();
+            } catch (Exception $e) {
+            }
+            return response()->json(['message' => 'Data cannot be processed.',], 422);
         }
     }
 
