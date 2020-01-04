@@ -5,8 +5,8 @@ namespace DG\Dissertation\Admin\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
-use DG\Dissertation\Admin\Http\Requests\UpdateEvent;
 use DG\Dissertation\Admin\Http\Requests\StoreEvent;
+use DG\Dissertation\Admin\Http\Requests\UpdateEvent;
 use DG\Dissertation\Admin\Models\Organizer;
 use DG\Dissertation\Admin\Repositories\AttendeeRepository;
 use DG\Dissertation\Admin\Repositories\EventRepository;
@@ -17,7 +17,6 @@ use DG\Dissertation\Admin\Services\EventImageService;
 use DG\Dissertation\Admin\Supports\ConstantDefine;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use function foo\func;
 
 class EventController extends Controller
 {
@@ -564,6 +563,7 @@ class EventController extends Controller
     /**
      * @param $event
      * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function datatableRegistrations($event, Request $request)
     {
@@ -575,14 +575,24 @@ class EventController extends Controller
                     'registrations' => function ($query) use ($type) {
                         return $query->where('status', strtoupper($type));
                     },
-                    'registrations.attendee'
+                    'sessions',
+                    'registrations.attendee',
                 ]);
-
+            $sessions = $event->sessions;
             return \DataTables::make($event->registrations)
-                ->rawColumns(['full_name'])
+                ->rawColumns(['full_name', 'session_attended'])
                 ->addColumn('full_name', function ($registration) {
                     $attendee = $registration->attendee;
                     return '<div class="text-left" style="padding-left: 20px">' . $attendee->firstname . ' ' . $attendee->lastname . '</div>';
+                })
+                ->addColumn('session_attended', function ($registration) use ($sessions) {
+                    $sessions = collect(json_decode($registration->verify_history))->map(function ($session) use ($sessions) {
+                        $ss = $sessions->where('id', $session->session_id)->first();
+                        return "<li>{$ss->title}</li>";
+                    })->toArray();
+                    if (count($sessions) > 0)
+                        return "<ul>" . implode('', $sessions) . "</ul>";
+                    return "Not yet attended session";
                 })
                 ->addColumn('registered_at', function ($registration) {
                     return date('d/m/Y H:i', strtotime($registration->created_at));

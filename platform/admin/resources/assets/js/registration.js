@@ -1,6 +1,3 @@
-import Axios from "axios";
-import Helpers from "./helpers";
-
 class Registration {
     constructor() {
         this.$registrationtDatatable = $('#registration_table');
@@ -18,14 +15,14 @@ class Registration {
             let status = this.$dropdownPaid.data('status');
             this.$dropdownMenuOutlineButton1.text(this.$dropdownPaid.text());
             this.status = status;
-            this.$registrationtDatatable.DataTable().ajax.url(this.$registrationtDatatable.data('url')+ '?status='+this.resolveStatus()).load();
+            this.$registrationtDatatable.DataTable().ajax.url(this.$registrationtDatatable.data('url') + '?status=' + this.resolveStatus()).load();
         });
 
         this.$dropdownPending.click(event => {
             let status = this.$dropdownPending.data('status');
             this.$dropdownMenuOutlineButton1.text(this.$dropdownPending.text());
             this.status = status;
-            this.$registrationtDatatable.DataTable().ajax.url(this.$registrationtDatatable.data('url')+ '?status='+this.resolveStatus()).load();
+            this.$registrationtDatatable.DataTable().ajax.url(this.$registrationtDatatable.data('url') + '?status=' + this.resolveStatus()).load();
         })
 
     }
@@ -42,7 +39,7 @@ class Registration {
             ajax:
                 {
                     method: 'get',
-                    url: this.$registrationtDatatable.data('url')+ '?status='+this.resolveStatus(),
+                    url: this.$registrationtDatatable.data('url') + '?status=' + this.resolveStatus(),
                     headers:
                         {
                             'X-CSRF-TOKEN': $('meta[name=csrf-token]').attr('content')
@@ -64,6 +61,13 @@ class Registration {
                     name: 'full_name',
                     data: 'full_name',
                     class: 'text-center'
+                },
+
+                {
+                    title: 'Sessions attended',
+                    name: 'session_attended',
+                    data: 'session_attended',
+                    class: 'text-left pl-2 pr-2'
                 },
                 {
                     title: 'Registered at',
