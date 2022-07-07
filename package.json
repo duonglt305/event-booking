@@ -20,7 +20,7 @@
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
-        "moment": "^2.24.0",
+        "moment": "^2.29.4",
         "moment-timezone": "^0.5.27",
         "qr-scanner": "^1.1.1"
     }
